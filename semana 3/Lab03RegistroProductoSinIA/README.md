@@ -10,10 +10,16 @@ Aplicación de registro de producto desarrollada con Jetpack Compose. Permite in
 ## Capturas de pantalla
 
 ### Pantalla vacía
-![Pantalla vacía](captura%20sin%20nada%20.png)
+![Pantalla vacía](pantalla_vacia.png)
 
 ### Pantalla con producto registrado
-![Pantalla con producto](Captura%20con%20productos%20rellenados%20.png)
+![Pantalla con producto](pantalla_con_producto.png)
+
+### Validación de campos vacíos
+![Validación](pantalla_validacion.png)
+
+### Botón Limpiar
+![Limpiar](pantalla_limpia.png)
 
 ## ¿Qué pasaría si declaras las variables de los campos SIN remember?
 
