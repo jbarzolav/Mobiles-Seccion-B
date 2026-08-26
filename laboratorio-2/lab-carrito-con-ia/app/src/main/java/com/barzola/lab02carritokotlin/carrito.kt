@@ -46,6 +46,16 @@ fun calcularDescuento(total: Double): Double {
     }
 }
 
+// RETO ADICIONAL: Buscar y eliminar producto
+
+fun buscarProducto(productos: List<Producto>, nombre: String): Producto? {
+    return productos.find { it.nombre.equals(nombre, ignoreCase = true) }
+}
+
+fun eliminarProducto(productos: MutableList<Producto>, nombre: String): Boolean {
+    return productos.removeIf { it.nombre.equals(nombre, ignoreCase = true) }
+}
+
 fun main() {
     println("===========================================")
     println("    CARRITO DE COMPRAS - TIENDA TECSUP     ")
@@ -98,6 +108,52 @@ fun main() {
         val porcentaje = if (total > 5000) 10 else 5
         println(String.format("Descuento (%d%%) : -S/ %7.2f", porcentaje, descuento))
         println(String.format("TOTAL CON DSCTO : S/ %8.2f", totalConDescuento))
+    } else {
+        println("No se aplicó descuento (total ≤ S/ 3000)")
+    }
+
+    // RETO ADICIONAL: Buscar producto
+    println()
+    println("========== BUSCAR PRODUCTO ==========")
+    val nombreBuscar = "Mouse Logitech"
+    val encontrado = buscarProducto(carrito, nombreBuscar)
+    if (encontrado != null) {
+        println("Producto encontrado: ${encontrado.nombre} - S/ ${encontrado.precio}")
+    } else {
+        println("Producto '$nombreBuscar' no encontrado")
+    }
+
+    // RETO ADICIONAL: Eliminar producto
+    println()
+    println("========== ELIMINAR PRODUCTO ==========")
+    val nombreEliminar = "Audifonos Sony"
+    val eliminado = eliminarProducto(carrito, nombreEliminar)
+    if (eliminado) {
+        println("Producto '$nombreEliminar' eliminado del carrito")
+    } else {
+        println("Producto '$nombreEliminar' no encontrado para eliminar")
+    }
+    println()
+
+    // Mostrar detalle y totales actualizados
+    mostrarDetalle(carrito)
+    println("Cantidad de productos: ${carrito.size}")
+    println()
+
+    val nuevoSubtotal = calcularSubtotal(carrito)
+    val nuevoIgv = calcularIGV(nuevoSubtotal)
+    val nuevoTotal = calcularTotal(nuevoSubtotal, nuevoIgv)
+    val nuevoDescuento = calcularDescuento(nuevoTotal)
+    val nuevoTotalConDescuento = nuevoTotal - nuevoDescuento
+
+    println(String.format("Subtotal        : S/ %8.2f", nuevoSubtotal))
+    println(String.format("IGV (18%%)       : S/ %8.2f", nuevoIgv))
+    println(String.format("TOTAL           : S/ %8.2f", nuevoTotal))
+
+    if (nuevoDescuento > 0) {
+        val porcentaje = if (nuevoTotal > 5000) 10 else 5
+        println(String.format("Descuento (%d%%) : -S/ %7.2f", porcentaje, nuevoDescuento))
+        println(String.format("TOTAL CON DSCTO : S/ %8.2f", nuevoTotalConDescuento))
     } else {
         println("No se aplicó descuento (total ≤ S/ 3000)")
     }
