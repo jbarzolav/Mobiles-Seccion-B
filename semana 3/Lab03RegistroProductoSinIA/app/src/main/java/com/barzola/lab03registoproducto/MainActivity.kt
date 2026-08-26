@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -46,6 +47,9 @@ fun PantallaRegistro(modifier: Modifier = Modifier) {
     var precio by remember { mutableStateOf("") }
     var cantidad by remember { mutableStateOf("") }
     var mostrarResumen by remember { mutableStateOf(false) }
+    var errorNombre by remember { mutableStateOf("") }
+    var errorPrecio by remember { mutableStateOf("") }
+    var errorCantidad by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
@@ -65,36 +69,73 @@ fun PantallaRegistro(modifier: Modifier = Modifier) {
 
         OutlinedTextField(
             value = nombre,
-            onValueChange = { nombre = it },
+            onValueChange = { nombre = it; errorNombre = "" },
             label = { Text("Nombre del producto") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            isError = errorNombre.isNotEmpty()
         )
+        if (errorNombre.isNotEmpty()) {
+            Text(errorNombre, color = Color.Red)
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Row(modifier = Modifier.fillMaxWidth()) {
             OutlinedTextField(
                 value = precio,
-                onValueChange = { precio = it },
+                onValueChange = { precio = it; errorPrecio = "" },
                 label = { Text("Precio (S/)") },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                isError = errorPrecio.isNotEmpty()
             )
             Spacer(modifier = Modifier.width(16.dp))
             OutlinedTextField(
                 value = cantidad,
-                onValueChange = { cantidad = it },
+                onValueChange = { cantidad = it; errorCantidad = "" },
                 label = { Text("Cantidad") },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                isError = errorCantidad.isNotEmpty()
             )
+        }
+        if (errorPrecio.isNotEmpty()) {
+            Text(errorPrecio, color = Color.Red)
+        }
+        if (errorCantidad.isNotEmpty()) {
+            Text(errorCantidad, color = Color.Red)
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = { mostrarResumen = true },
+            onClick = {
+                errorNombre = if (nombre.isBlank()) "El nombre es obligatorio" else ""
+                errorPrecio = if (precio.isBlank()) "El precio es obligatorio" else ""
+                errorCantidad = if (cantidad.isBlank()) "La cantidad es obligatoria" else ""
+                mostrarResumen = errorNombre.isEmpty() && errorPrecio.isEmpty() && errorCantidad.isEmpty()
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("AGREGAR PRODUCTO")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(
+            onClick = {
+                nombre = ""
+                precio = ""
+                cantidad = ""
+                mostrarResumen = false
+                errorNombre = ""
+                errorPrecio = ""
+                errorCantidad = ""
+            },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.outline
+            )
+        ) {
+            Text("LIMPIAR")
         }
 
         Spacer(modifier = Modifier.height(24.dp))
