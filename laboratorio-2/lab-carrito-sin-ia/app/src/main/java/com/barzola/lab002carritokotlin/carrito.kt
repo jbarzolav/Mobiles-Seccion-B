@@ -1,15 +1,26 @@
 package com.barzola.lab02carritokotlin
 
-data class Producto(
-    val nombre: String,
-    val precio: Double,
-    var cantidad: Int
-)
+// ENCAPSULAMIENTO: datos y comportamiento juntos en la clase
+open class Producto(val nombre: String, val precio: Double, var cantidad: Int) {
+    open fun calcularSubtotal(): Double = precio * cantidad
+}
+
+// HERENCIA: ProductoDigital hereda de Producto
+class ProductoDigital(nombre: String, precio: Double, cantidad: Int, val formato: String) 
+    : Producto(nombre, precio, cantidad) {
+    // POLIMORFISMO: sobreescribe el método con comportamiento diferente
+    override fun calcularSubtotal(): Double = precio * cantidad * 0.9  // 10% descuento digital
+}
+
+// ABSTRACCIÓN: interfaz que define un contrato
+interface Calculable {
+    fun calcular(): Double
+}
 
 fun calcularSubtotal(productos: List<Producto>): Double {
     var subtotal = 0.0
     for (p in productos) {
-        subtotal += p.precio * p.cantidad
+        subtotal += p.calcularSubtotal()  // POLIMORFISMO: se ejecuta según el tipo
     }
     return subtotal
 }
@@ -26,14 +37,13 @@ fun mostrarDetalle(productos: List<Producto>) {
     println("--------- DETALLE DEL CARRITO ---------")
     var i = 1
     for (p in productos) {
-        val importe = p.precio * p.cantidad
+        val importe = p.calcularSubtotal()
         println(String.format("%d. %-20s x%d S/ %8.2f", i, p.nombre, p.cantidad, importe))
         i++
     }
     println("---------------------------------------")
 }
 
-// Parte 5 - Paso 2: Función descuento completada de forma simple literal
 fun calcularDescuento(total: Double): Double {
     return when {
         total > 5000 -> total * 0.10
@@ -42,12 +52,10 @@ fun calcularDescuento(total: Double): Double {
     }
 }
 
-// Reto adicional: Buscar producto
 fun buscarProducto(productos: List<Producto>, nombre: String): Producto? {
     return productos.find { it.nombre.equals(nombre, ignoreCase = true) }
 }
 
-// Reto adicional: Eliminar producto
 fun eliminarProducto(productos: MutableList<Producto>, nombre: String): Boolean {
     return productos.removeIf { it.nombre.equals(nombre, ignoreCase = true) }
 }
@@ -65,15 +73,12 @@ fun main() {
     carrito.add(Producto("Laptop HP", 2500.0, 1))
     carrito.add(Producto("Mouse Logitech", 45.5, 2))
     carrito.add(Producto("Audifonos Sony", 120.0, 1))
-
-    // Paso 3: Agregamos un producto extra pesado para que el total supere los S/ 3000 y se active el descuento
-    carrito.add(Producto("Monitor Gamer", 800.0, 1))
+    carrito.add(ProductoDigital("Curso Kotlin", 150.0, 1, "PDF"))
 
     mostrarDetalle(carrito)
     println("Cantidad de productos: ${carrito.size}")
     println()
 
-    // Parte 5 - Paso 1: Buscar e imprimir el producto más caro
     val masCaro = carrito.maxByOrNull { it.precio }
     if (masCaro != null) {
         println("Producto mas caro: ${masCaro.nombre} " + String.format("(S/ %.2f)", masCaro.precio))
@@ -83,8 +88,6 @@ fun main() {
     val subtotal = calcularSubtotal(carrito)
     val igv = calcularIGV(subtotal)
     val totalBase = calcularTotal(subtotal, igv)
-
-    // Parte 5 - Paso 3: Calcular el descuento e imprimir los totales finales formatted
     val descuento = calcularDescuento(totalBase)
     val totalConDescuento = totalBase - descuento
 
@@ -94,7 +97,6 @@ fun main() {
     println(String.format("%-25s S/ %8.2f", "Descuento aplicado :", descuento))
     println(String.format("%-25s S/ %8.2f", "TOTAL CON DESCUENTO:", totalConDescuento))
 
-    // Reto adicional: Buscar producto
     println()
     println("========== BUSCAR PRODUCTO ==========")
     val nombreBuscar = "Mouse Logitech"
@@ -105,7 +107,6 @@ fun main() {
         println("Producto '$nombreBuscar' no encontrado")
     }
 
-    // Reto adicional: Eliminar producto
     println()
     println("========== ELIMINAR PRODUCTO ==========")
     val nombreEliminar = "Audifonos Sony"
