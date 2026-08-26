@@ -72,7 +72,8 @@ fun PantallaRegistro(modifier: Modifier = Modifier) {
             onValueChange = { nombre = it; errorNombre = "" },
             label = { Text("Nombre del producto") },
             modifier = Modifier.fillMaxWidth(),
-            isError = errorNombre.isNotEmpty()
+            isError = errorNombre.isNotEmpty(),
+            singleLine = true
         )
         if (errorNombre.isNotEmpty()) {
             Text(errorNombre, color = Color.Red)
@@ -86,7 +87,8 @@ fun PantallaRegistro(modifier: Modifier = Modifier) {
                 onValueChange = { precio = it; errorPrecio = "" },
                 label = { Text("Precio (S/)") },
                 modifier = Modifier.weight(1f),
-                isError = errorPrecio.isNotEmpty()
+                isError = errorPrecio.isNotEmpty(),
+                singleLine = true
             )
             Spacer(modifier = Modifier.width(16.dp))
             OutlinedTextField(
@@ -94,7 +96,8 @@ fun PantallaRegistro(modifier: Modifier = Modifier) {
                 onValueChange = { cantidad = it; errorCantidad = "" },
                 label = { Text("Cantidad") },
                 modifier = Modifier.weight(1f),
-                isError = errorCantidad.isNotEmpty()
+                isError = errorCantidad.isNotEmpty(),
+                singleLine = true
             )
         }
         if (errorPrecio.isNotEmpty()) {
