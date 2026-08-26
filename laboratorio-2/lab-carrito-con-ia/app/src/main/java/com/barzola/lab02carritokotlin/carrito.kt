@@ -75,27 +75,47 @@ fun main() {
     println("	CARRITO DE COMPRAS - TIENDA TECSUP	")
     println("=========================================")
 
-    val nombreCliente = "Juan Leon"
+    // PEDIR NOMBRE DEL CLIENTE
+    print("Ingrese su nombre: ")
+    val nombreCliente = readLine() ?: ""
     val carrito = mutableListOf<Producto>()
     println("Cliente: $nombreCliente")
     println()
 
-    // HERENCIA: productos normales y un producto digital
-    carrito.add(Producto("Laptop HP", 2500.0, 1))
-    carrito.add(Producto("Mouse Logitech", 45.5, 2))
-    carrito.add(Producto("Audifonos Sony", 120.0, 1))
-    carrito.add(ProductoDigital("Curso Kotlin", 150.0, 1, "PDF"))
+    // PEDIR PRODUCTOS AL USUARIO
+    var agregarMas = true
+    while (agregarMas) {
+        println("--- AGREGAR PRODUCTO ---")
+        print("Nombre del producto: ")
+        val nombre = readLine() ?: ""
+        print("Precio: S/ ")
+        val precio = readLine()?.toDoubleOrNull() ?: 0.0
+        print("Cantidad: ")
+        val cantidad = readLine()?.toIntOrNull() ?: 1
 
+        carrito.add(Producto(nombre, precio, cantidad))
+        println("Producto '$nombre' agregado al carrito.")
+        println()
+
+        print("¿Desea agregar otro producto? (s/n): ")
+        val respuesta = readLine() ?: "n"
+        agregarMas = respuesta.lowercase() == "s"
+        println()
+    }
+
+    // MOSTRAR DETALLE
     mostrarDetalle(carrito)
     println("Cantidad de productos: ${carrito.size}")
     println()
 
+    // PRODUCTO MÁS CARO
     val masCaro = carrito.maxByOrNull { it.precio }
     if (masCaro != null) {
         println("Producto mas caro: ${masCaro.nombre} " + String.format("(S/ %.2f)", masCaro.precio))
     }
     println()
 
+    // CALCULAR TOTALES
     val subtotal = calcularSubtotal(carrito)
     val igv = calcularIGV(subtotal)
     val totalBase = calcularTotal(subtotal, igv)
@@ -108,9 +128,11 @@ fun main() {
     println(String.format("%-25s S/ %8.2f", "Descuento aplicado :", descuento))
     println(String.format("%-25s S/ %8.2f", "TOTAL CON DESCUENTO:", totalConDescuento))
 
+    // BUSCAR PRODUCTO
     println()
     println("========== BUSCAR PRODUCTO ==========")
-    val nombreBuscar = "Mouse Logitech"
+    print("Nombre del producto a buscar: ")
+    val nombreBuscar = readLine() ?: ""
     val encontrado = buscarProducto(carrito, nombreBuscar)
     if (encontrado != null) {
         println("Producto encontrado: ${encontrado.nombre} - S/ ${encontrado.precio}")
@@ -118,9 +140,11 @@ fun main() {
         println("Producto '$nombreBuscar' no encontrado")
     }
 
+    // ELIMINAR PRODUCTO
     println()
     println("========== ELIMINAR PRODUCTO ==========")
-    val nombreEliminar = "Audifonos Sony"
+    print("Nombre del producto a eliminar: ")
+    val nombreEliminar = readLine() ?: ""
     val eliminado = eliminarProducto(carrito, nombreEliminar)
     if (eliminado) {
         println("Producto '$nombreEliminar' eliminado del carrito")
@@ -129,6 +153,7 @@ fun main() {
     }
     println()
 
+    // MOSTRAR TOTALES ACTUALIZADOS
     mostrarDetalle(carrito)
     println("Cantidad de productos: ${carrito.size}")
     println()
