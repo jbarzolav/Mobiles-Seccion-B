@@ -42,6 +42,16 @@ fun calcularDescuento(total: Double): Double {
     }
 }
 
+// Reto adicional: Buscar producto
+fun buscarProducto(productos: List<Producto>, nombre: String): Producto? {
+    return productos.find { it.nombre.equals(nombre, ignoreCase = true) }
+}
+
+// Reto adicional: Eliminar producto
+fun eliminarProducto(productos: MutableList<Producto>, nombre: String): Boolean {
+    return productos.removeIf { it.nombre.equals(nombre, ignoreCase = true) }
+}
+
 fun main() {
     println("=========================================")
     println("	CARRITO DE COMPRAS - TIENDA TECSUP	")
@@ -83,4 +93,43 @@ fun main() {
     println(String.format("%-25s S/ %8.2f", "TOTAL :", totalBase))
     println(String.format("%-25s S/ %8.2f", "Descuento aplicado :", descuento))
     println(String.format("%-25s S/ %8.2f", "TOTAL CON DESCUENTO:", totalConDescuento))
+
+    // Reto adicional: Buscar producto
+    println()
+    println("========== BUSCAR PRODUCTO ==========")
+    val nombreBuscar = "Mouse Logitech"
+    val encontrado = buscarProducto(carrito, nombreBuscar)
+    if (encontrado != null) {
+        println("Producto encontrado: ${encontrado.nombre} - S/ ${encontrado.precio}")
+    } else {
+        println("Producto '$nombreBuscar' no encontrado")
+    }
+
+    // Reto adicional: Eliminar producto
+    println()
+    println("========== ELIMINAR PRODUCTO ==========")
+    val nombreEliminar = "Audifonos Sony"
+    val eliminado = eliminarProducto(carrito, nombreEliminar)
+    if (eliminado) {
+        println("Producto '$nombreEliminar' eliminado del carrito")
+    } else {
+        println("Producto '$nombreEliminar' no encontrado para eliminar")
+    }
+    println()
+
+    mostrarDetalle(carrito)
+    println("Cantidad de productos: ${carrito.size}")
+    println()
+
+    val nuevoSubtotal = calcularSubtotal(carrito)
+    val nuevoIgv = calcularIGV(nuevoSubtotal)
+    val nuevoTotal = calcularTotal(nuevoSubtotal, nuevoIgv)
+    val nuevoDescuento = calcularDescuento(nuevoTotal)
+    val nuevoTotalConDescuento = nuevoTotal - nuevoDescuento
+
+    println(String.format("%-25s S/ %8.2f", "Subtotal :", nuevoSubtotal))
+    println(String.format("%-25s S/ %8.2f", "IGV (18%):", nuevoIgv))
+    println(String.format("%-25s S/ %8.2f", "TOTAL :", nuevoTotal))
+    println(String.format("%-25s S/ %8.2f", "Descuento aplicado :", nuevoDescuento))
+    println(String.format("%-25s S/ %8.2f", "TOTAL CON DESCUENTO:", nuevoTotalConDescuento))
 }
