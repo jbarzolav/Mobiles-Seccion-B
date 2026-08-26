@@ -22,7 +22,6 @@ fun calcularTotal(subtotal: Double, igv: Double): Double {
     return subtotal + igv
 }
 
-
 fun mostrarDetalle(productos: List<Producto>) {
     println("--------- DETALLE DEL CARRITO ---------")
     var i = 1
@@ -32,6 +31,15 @@ fun mostrarDetalle(productos: List<Producto>) {
         i++
     }
     println("---------------------------------------")
+}
+
+// Parte 5 - Paso 2: Función descuento completada de forma simple literal
+fun calcularDescuento(total: Double): Double {
+    return when {
+        total > 5000 -> total * 0.10
+        total > 3000 -> total * 0.05
+        else -> 0.0
+    }
 }
 
 fun main() {
@@ -48,17 +56,31 @@ fun main() {
     carrito.add(Producto("Mouse Logitech", 45.5, 2))
     carrito.add(Producto("Audifonos Sony", 120.0, 1))
 
+    // Paso 3: Agregamos un producto extra pesado para que el total supere los S/ 3000 y se active el descuento
+    carrito.add(Producto("Monitor Gamer", 800.0, 1))
 
     mostrarDetalle(carrito)
     println("Cantidad de productos: ${carrito.size}")
     println()
 
+    // Parte 5 - Paso 1: Buscar e imprimir el producto más caro
+    val masCaro = carrito.maxByOrNull { it.precio }
+    if (masCaro != null) {
+        println("Producto mas caro: ${masCaro.nombre} " + String.format("(S/ %.2f)", masCaro.precio))
+    }
+    println()
+
     val subtotal = calcularSubtotal(carrito)
     val igv = calcularIGV(subtotal)
-    val total = calcularTotal(subtotal, igv)
+    val totalBase = calcularTotal(subtotal, igv)
 
+    // Parte 5 - Paso 3: Calcular el descuento e imprimir los totales finales formatted
+    val descuento = calcularDescuento(totalBase)
+    val totalConDescuento = totalBase - descuento
 
     println(String.format("%-25s S/ %8.2f", "Subtotal :", subtotal))
     println(String.format("%-25s S/ %8.2f", "IGV (18%):", igv))
-    println(String.format("%-25s S/ %8.2f", "TOTAL A PAGAR:", total))
+    println(String.format("%-25s S/ %8.2f", "TOTAL :", totalBase))
+    println(String.format("%-25s S/ %8.2f", "Descuento aplicado :", descuento))
+    println(String.format("%-25s S/ %8.2f", "TOTAL CON DESCUENTO:", totalConDescuento))
 }
