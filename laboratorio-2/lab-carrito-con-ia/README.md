@@ -16,10 +16,7 @@ Este programa implementa un **carrito de compras** para la Tienda Tecsup utiliza
 - **Calcular IGV** (18%) sobre el subtotal
 - **Calcular el total** a pagar (subtotal + IGV)
 - **Identificar el producto más caro** usando `maxByOrNull`
-- **Aplicar descuentos** según el monto total usando `when`:
-  - 10% de descuento si el total supera S/ 5000
-  - 5% de descuento si el total supera S/ 3000
-  - Sin descuento si el total es menor o igual a S/ 3000
+- **Aplicar descuentos** según el monto total usando `when`
 - **Generar un reporte detallado** con columnas alineadas usando `String.format`
 
 ### Funciones Implementadas
@@ -32,6 +29,233 @@ Este programa implementa un **carrito de compras** para la Tienda Tecsup utiliza
 | `calcularDescuento()` | Aplica descuento según el monto total |
 | `mostrarDetalle()` | Muestra el reporte formateado con columnas alineadas |
 | `main()` | Función principal que ejecuta todo el flujo |
+
+---
+
+## Explicación Detallada por Partes
+
+### PARTE 1: Proyecto y Repositorio
+
+**Qué se hizo:** Crear el proyecto en Android Studio con la plantilla Empty Activity y configurar el repositorio Git.
+
+**Conceptos clave:**
+- Android Studio genera automáticamente la estructura del proyecto con `build.gradle.kts`, `AndroidManifest.xml`, y las carpetas `app/src/main/java/`
+- El paquete se creó como `com.barzola.lab02carritokotlin`
+- Se publicó en GitHub con el nombre `lab02-carrito-tuapellido`
+
+<!-- ESPACIO PARA CAPTURA DE PARTE 1 -->
+
+---
+
+### PARTE 2: Modelo de Datos y Variables
+
+**Qué se hizo:** Crear la estructura que representa un producto en el carrito.
+
+**Código:**
+```kotlin
+data class Producto(val nombre: String, val precio: Double, var cantidad: Int)
+```
+
+**¿Por qué `data class`?**
+- Genera automáticamente `toString()`, `equals()`, `hashCode()`, y `copy()`
+- Sin `data class`, tendríamos que escribir estos métodos manualmente
+- Es la forma idiomática de Kotlin para modelos de datos
+
+**¿Por qué `val` vs `var`?**
+
+| Propiedad | Tipo | Razón |
+|-----------|------|-------|
+| `nombre` | `val` | El nombre del producto no debería cambiar después de crearlo |
+| `precio` | `val` | El precio base es fijo, se modifica con funciones separadas |
+| `cantidad` | `var` | La cantidad cambia cuando el usuario agrega/quita unidades |
+
+**¿Qué pasa si intento cambiar un `val`?**
+```kotlin
+val precio = 2500.0
+precio = 999.0  // ❌ ERROR: Val cannot be reassigned
+```
+Kotlin protege la integridad de los datos. Esto evita bugs accidentales.
+
+**Función `main()` inicial:**
+```kotlin
+fun main() {
+    val nombreCliente = "Juan Leon"
+    val carrito = mutableListOf<Producto>()
+    
+    println("Cliente: $nombreCliente")
+    
+    carrito.add(Producto("Laptop HP", 2500.0, 1))
+    carrito.add(Producto("Mouse Logitech", 45.5, 2))
+    
+    for (producto in carrito) {
+        println("Producto agregado: ${producto.nombre}")
+    }
+}
+```
+
+**Conceptos:**
+- `mutableListOf<Producto>()` → Lista vacía que permite agregar/eliminar elementos
+- `add()` → Método para agregar elementos a la lista
+- `for (producto in carrito)` → Bucle que recorre cada elemento
+- `"Cliente: $nombreCliente"` → String template para insertar variables
+
+<!-- ESPACIO PARA CAPTURA DE PARTE 2 -->
+
+---
+
+### PARTE 3: Funciones de Cálculo
+
+**Qué se hizo:** Separar la lógica en funciones reutilizables.
+
+**Función 1: Calcular Subtotal**
+```kotlin
+fun calcularSubtotal(productos: List<Producto>): Double {
+    var subtotal = 0.0
+    for (p in productos) {
+        subtotal += p.precio * p.cantidad
+    }
+    return subtotal
+}
+```
+
+| Elemento | Explicación |
+|----------|-------------|
+| `productos: List<Producto>` | Parámetro de tipo inmutable (la función no modifica la lista) |
+| `: Double` | Tipo de retorno explícito |
+| `var subtotal = 0.0` | Variable local mutable para acumular |
+| `+=` | Operador de acumulación (subtotal = subtotal + ...) |
+| `return subtotal` | Retorna el valor calculado |
+
+**¿Por qué `List<Producto>` y no `MutableList<Producto>`?**
+- Buenas prácticas: las funciones de cálculo no deberían modificar la lista
+- Si usáramos `MutableList`, la función podría modificar el carrito accidentalmente
+
+**Función 2: Calcular IGV**
+```kotlin
+fun calcularIGV(subtotal: Double): Double {
+    return subtotal * 0.18
+}
+```
+- Recibe el subtotal como parámetro
+- Retorna el 18% (IGV peruano)
+- Función pura: solo calcula, no tiene efectos secundarios
+
+**Función 3: Calcular Total**
+```kotlin
+fun calcularTotal(subtotal: Double, igv: Double): Double {
+    return subtotal + igv
+}
+```
+- Suma subtotal + IGV
+- Se separó en 3 funciones para mayor claridad y reutilización
+
+**¿Por qué separar en 3 funciones?**
+1. **Claridad**: Cada función hace una cosa específica
+2. **Reutilización**: Se pueden usar independientemente
+3. **Testing**: Fácil de probar cada función por separado
+4. **Mantenimiento**: Si cambia el IGV, solo se modifica una función
+
+<!-- ESPACIO PARA CAPTURA DE PARTE 3 -->
+
+---
+
+### PARTE 4: Reporte con Formato
+
+**Qué se hizo:** Crear una función que muestra el detalle con columnas alineadas.
+
+**Código:**
+```kotlin
+fun mostrarDetalle(productos: List<Producto>) {
+    println("---------- DETALLE DEL CARRITO ----------")
+    var i = 1
+    for (p in productos) {
+        val importe = p.precio * p.cantidad
+        println(String.format("%d. %-20s x%d S/ %8.2f", i, p.nombre, p.cantidad, importe))
+        i++
+    }
+    println("------------------------------------------")
+}
+```
+
+**Explicación de `String.format()`:**
+
+| Símbolo | Significado | Ejemplo |
+|---------|-------------|---------|
+| `%d` | Entero | `1`, `2`, `3` |
+| `%-20s` | String alineado a la izquierda en 20 espacios | `"Laptop HP           "` |
+| `%8.2f` | Decimal con 2 decimales, alineado a la derecha en 8 espacios | `2500.00` |
+
+**Ejemplo visual:**
+```
+1. Laptop HP           x1 S/  2500.00
+2. Mouse Logitech      x2 S/    91.00
+3. Audifonos Sony      x1 S/   120.00
+```
+
+**¿Por qué `String.format` y no string templates?**
+- `String.format` permite controlar la alineación y el ancho de las columnas
+- Los string templates (`"$variable"`) no tienen control de formato
+- Para reportes con columnas alineadas, `String.format` es la herramienta correcta
+
+<!-- ESPACIO PARA CAPTURA DE PARTE 4 -->
+
+---
+
+### PARTE 5: Producto Más Caro y Descuento
+
+**Qué se hizo:** Implementar dos funcionalidades avanzadas usando funciones de Kotlin.
+
+**1. Producto Más Caro:**
+```kotlin
+val masCaro = carrito.maxByOrNull { it.precio }
+if (masCaro != null) {
+    println("Producto más caro: ${masCaro.nombre} " +
+            String.format("(S/ %.2f)", masCaro.precio))
+}
+```
+
+**¿Qué hace `maxByOrNull`?**
+- Recorre la lista y retorna el elemento con el valor más alto según la lambda
+- Si la lista está vacía, retorna `null` (por eso el `if`)
+- `{ it.precio }` → Lambda que indica comparar por precio
+
+**¿Por qué no `maxOf`?**
+- `maxOf` lanza excepción si la lista está vacía
+- `maxByOrNull` es más seguro, retorna `null` en lugar de fallar
+
+**2. Descuento con `when`:**
+```kotlin
+fun calcularDescuento(total: Double): Double {
+    return when {
+        total > 5000 -> total * 0.10  // 10% si supera S/ 5000
+        total > 3000 -> total * 0.05  // 5% si supera S/ 3000
+        else -> 0.0                    // Sin descuento
+    }
+}
+```
+
+**¿Por qué `when` sin argumento?**
+- `when` con argumento: `when (opcion) { 1 -> ..., 2 -> ... }`
+- `when` sin argumento: evalúa expresiones booleanas (`total > 5000`)
+- Es equivalente a un `if-else` chain pero más legible
+
+**¿Por qué `else -> 0.0`?**
+- Si ninguna condición se cumple, no hay descuento
+- Retorna 0.0 para mantener el tipo de retorno consistente
+
+<!-- ESPACIO PARA CAPTURA DE PARTE 5 -->
+
+---
+
+## Resumen de Conceptos Kotlin por Parte
+
+| Parte | Conceptos Principales |
+|-------|----------------------|
+| Parte 1 | Estructura del proyecto Android, Git, GitHub |
+| Parte 2 | `data class`, `val` vs `var`, `mutableListOf()`, string templates |
+| Parte 3 | Funciones con tipos explícitos, `List` vs `MutableList`, `return` |
+| Parte 4 | `String.format()`, alineación de columnas, bucles `for` |
+| Parte 5 | `maxByOrNull`, `when` sin argumento, funciones puras |
 
 ---
 
@@ -132,16 +356,6 @@ El proyecto se desarrolló en 5 iteraciones siguiendo las partes del laboratorio
 | Parte 3 | Funciones de cálculo | `e003c5e` |
 | Parte 4 | Reporte con formato | `5067b8e` |
 | Parte 5 | Producto más caro y descuento | `bd92054` |
-
-### Conceptos Kotlin Aplicados
-
-- **Data classes**: Modelo de datos conciso
-- **Expresiones when**: Lógica condicional para descuentos
-- **maxByOrNull**: Búsqueda de elemento máximo en colecciones
-- **String.format**: Formateo de salida con columnas alineadas
-- **Funciones con tipos explícitos**: Código claro y documentado
-- **Inmutabilidad (val)**: Protección de datos
-- **Bucles for**: Iteración sobre colecciones
 
 ---
 
