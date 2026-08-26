@@ -8,3 +8,8 @@ data class Prestamo(
     val fechaEntrega: String,
     val diasAtraso: Int
 )
+
+fun calcularMulta(diasAtraso: Int): Double {
+    val MULTA_POR_DIA = 1.50
+    return diasAtraso * MULTA_POR_DIA
+}
