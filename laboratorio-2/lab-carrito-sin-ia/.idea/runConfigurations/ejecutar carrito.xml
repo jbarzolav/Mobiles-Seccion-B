@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="ejecutar carrito" type="TestBundleConfigurationType" factoryName="Kotlin">
+      <module name="Lab002CarritoKotlin.app.main" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="ENV_VARIABLES" value="" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="KOTLIN_TEST_RUNNER" value="junit" />
+      <option name="MAIN_CLASS" value="com.barzola.lab02carritokotlin.PruebaCarrito" />
+      <option name="METHOD_NAME" value="correrConsola" />
+      <option name="ADDITIONAL_OPTIONS" value="" />
+      <option name="CODECoverage_ENABLED" value="false" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="TEST_SEARCH_LOCATION" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+</project>
