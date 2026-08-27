@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="CarritoKt" type="KotlinRunConfiguration" factoryName="Kotlin">
+    <module name="lab-carrito-con-ia.app.main" />
+    <KotlinRunConfigurationFacade class="com.barzola.lab02carritokotlinKt" methodName="main" />
+    <option name="vmArgs" value="" />
+    <option name="arguments" value="" />
+    <option name="ALTERNATIVE_JRE_PATH" value="" />
+    <option name="PASS_PARENT_ENVS" value="true" />
+    <option name="/KotlinRunConfigurationFacadeclass" value="com.barzola.lab02carritokotlinKt" />
+    <option name="/module" value="lab-carrito-con-ia.app.main" />
+  </configuration>
+</component>
