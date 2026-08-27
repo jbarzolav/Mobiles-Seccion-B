@@ -60,20 +60,128 @@ fun eliminarProducto(productos: MutableList<Producto>, nombre: String): Boolean 
     return productos.removeIf { it.nombre.equals(nombre, ignoreCase = true) }
 }
 
-fun main() {
-    println("=========================================")
-    println("	CARRITO DE COMPRAS - TIENDA TECSUP	")
-    println("=========================================")
+fun ejecutarDemo(): String {
+    val sb = StringBuilder()
+    sb.appendLine("=========================================")
+    sb.appendLine("   CARRITO DE COMPRAS - TIENDA TECSUP   ")
+    sb.appendLine("=========================================")
 
     val nombreCliente = "Juan Leon"
     val carrito = mutableListOf<Producto>()
-    println("Cliente: $nombreCliente")
-    println()
+    sb.appendLine("Cliente: $nombreCliente")
+    sb.appendLine()
 
     carrito.add(Producto("Laptop HP", 2500.0, 1))
     carrito.add(Producto("Mouse Logitech", 45.5, 2))
     carrito.add(Producto("Audifonos Sony", 120.0, 1))
     carrito.add(ProductoDigital("Curso Kotlin", 150.0, 1, "PDF"))
+
+    sb.appendLine("--------- DETALLE DEL CARRITO ---------")
+    var i = 1
+    for (p in carrito) {
+        val importe = p.calcularSubtotal()
+        sb.appendLine(String.format("%d. %-20s x%d S/ %8.2f", i, p.nombre, p.cantidad, importe))
+        i++
+    }
+    sb.appendLine("---------------------------------------")
+    sb.appendLine("Cantidad de productos: ${carrito.size}")
+    sb.appendLine()
+
+    val masCaro = carrito.maxByOrNull { it.precio }
+    if (masCaro != null) {
+        sb.appendLine("Producto mas caro: ${masCaro.nombre} " + String.format("(S/ %.2f)", masCaro.precio))
+    }
+    sb.appendLine()
+
+    val subtotal = calcularSubtotal(carrito)
+    val igv = calcularIGV(subtotal)
+    val totalBase = calcularTotal(subtotal, igv)
+    val descuento = calcularDescuento(totalBase)
+    val totalConDescuento = totalBase - descuento
+
+    sb.appendLine(String.format("%-25s S/ %8.2f", "Subtotal :", subtotal))
+    sb.appendLine(String.format("%-25s S/ %8.2f", "IGV (18%):", igv))
+    sb.appendLine(String.format("%-25s S/ %8.2f", "TOTAL :", totalBase))
+    sb.appendLine(String.format("%-25s S/ %8.2f", "Descuento aplicado :", descuento))
+    sb.appendLine(String.format("%-25s S/ %8.2f", "TOTAL CON DESCUENTO:", totalConDescuento))
+
+    sb.appendLine()
+    sb.appendLine("========== BUSCAR PRODUCTO ==========")
+    val nombreBuscar = "Mouse Logitech"
+    val encontrado = buscarProducto(carrito, nombreBuscar)
+    if (encontrado != null) {
+        sb.appendLine("Producto encontrado: ${encontrado.nombre} - S/ ${encontrado.precio}")
+    } else {
+        sb.appendLine("Producto '$nombreBuscar' no encontrado")
+    }
+
+    sb.appendLine()
+    sb.appendLine("========== ELIMINAR PRODUCTO ==========")
+    val nombreEliminar = "Audifonos Sony"
+    val eliminado = eliminarProducto(carrito, nombreEliminar)
+    if (eliminado) {
+        sb.appendLine("Producto '$nombreEliminar' eliminado del carrito")
+    } else {
+        sb.appendLine("Producto '$nombreEliminar' no encontrado para eliminar")
+    }
+    sb.appendLine()
+
+    sb.appendLine("--------- DETALLE DEL CARRITO ---------")
+    i = 1
+    for (p in carrito) {
+        val importe = p.calcularSubtotal()
+        sb.appendLine(String.format("%d. %-20s x%d S/ %8.2f", i, p.nombre, p.cantidad, importe))
+        i++
+    }
+    sb.appendLine("---------------------------------------")
+    sb.appendLine("Cantidad de productos: ${carrito.size}")
+    sb.appendLine()
+
+    val nuevoSubtotal = calcularSubtotal(carrito)
+    val nuevoIgv = calcularIGV(nuevoSubtotal)
+    val nuevoTotal = calcularTotal(nuevoSubtotal, nuevoIgv)
+    val nuevoDescuento = calcularDescuento(nuevoTotal)
+    val nuevoTotalConDescuento = nuevoTotal - nuevoDescuento
+
+    sb.appendLine(String.format("%-25s S/ %8.2f", "Subtotal :", nuevoSubtotal))
+    sb.appendLine(String.format("%-25s S/ %8.2f", "IGV (18%):", nuevoIgv))
+    sb.appendLine(String.format("%-25s S/ %8.2f", "TOTAL :", nuevoTotal))
+    sb.appendLine(String.format("%-25s S/ %8.2f", "Descuento aplicado :", nuevoDescuento))
+    sb.appendLine(String.format("%-25s S/ %8.2f", "TOTAL CON DESCUENTO:", nuevoTotalConDescuento))
+
+    return sb.toString()
+}
+
+fun main() {
+    println("=========================================")
+    println("   CARRITO DE COMPRAS - TIENDA TECSUP   ")
+    println("=========================================")
+
+    print("Ingrese su nombre: ")
+    val nombreCliente = readln()
+    val carrito = mutableListOf<Producto>()
+    println("Cliente: $nombreCliente")
+    println()
+
+    var agregarMas = true
+    while (agregarMas) {
+        println("--- AGREGAR PRODUCTO ---")
+        print("Nombre del producto: ")
+        val nombre = readln()
+        print("Precio: S/ ")
+        val precio = readln().toDoubleOrNull() ?: 0.0
+        print("Cantidad: ")
+        val cantidad = readln().toIntOrNull() ?: 1
+
+        carrito.add(Producto(nombre, precio, cantidad))
+        println("Producto '$nombre' agregado al carrito.")
+        println()
+
+        print("Desea agregar otro producto? (s/n): ")
+        val respuesta = readln()
+        agregarMas = respuesta.lowercase() == "s"
+        println()
+    }
 
     mostrarDetalle(carrito)
     println("Cantidad de productos: ${carrito.size}")
@@ -99,7 +207,8 @@ fun main() {
 
     println()
     println("========== BUSCAR PRODUCTO ==========")
-    val nombreBuscar = "Mouse Logitech"
+    print("Nombre del producto a buscar: ")
+    val nombreBuscar = readln()
     val encontrado = buscarProducto(carrito, nombreBuscar)
     if (encontrado != null) {
         println("Producto encontrado: ${encontrado.nombre} - S/ ${encontrado.precio}")
@@ -109,7 +218,8 @@ fun main() {
 
     println()
     println("========== ELIMINAR PRODUCTO ==========")
-    val nombreEliminar = "Audifonos Sony"
+    print("Nombre del producto a eliminar: ")
+    val nombreEliminar = readln()
     val eliminado = eliminarProducto(carrito, nombreEliminar)
     if (eliminado) {
         println("Producto '$nombreEliminar' eliminado del carrito")

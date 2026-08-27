@@ -5,6 +5,6 @@ import org.junit.Test
 class PruebaCarrito {
     @Test
     fun correrConsola() {
-        main()
+        println(ejecutarDemo())
     }
 }
