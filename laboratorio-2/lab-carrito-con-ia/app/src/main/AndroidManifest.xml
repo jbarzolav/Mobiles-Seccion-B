@@ -12,16 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Lab02CarritoKotlin">
         <activity
-            android:name=".MainActivity"
+            android:name=".CarritoActivity"
             android:exported="true"
             android:theme="@style/Theme.Lab02CarritoKotlin"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Lab02CarritoKotlin" />
     </application>
 
 </manifest>
