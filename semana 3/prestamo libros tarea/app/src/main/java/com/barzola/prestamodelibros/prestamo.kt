@@ -10,13 +10,19 @@ data class Prestamo(
 )
 
 fun calcularMulta(diasAtraso: Int, tipoUsuario: String): Double {
-    val multaPorDia = if (tipoUsuario == "Docente") 2.00 else 1.50
+    val multaPorDia = when (tipoUsuario) {
+        "Docente" -> 2.00
+        else -> 1.50
+    }
     return diasAtraso * multaPorDia
 }
 
 fun mostrarTablaMultas(diasAtraso: Int, tipoUsuario: String): String {
     val sb = StringBuilder()
-    val multaPorDia = if (tipoUsuario == "Docente") 2.00 else 1.50
+    val multaPorDia = when (tipoUsuario) {
+        "Docente" -> 2.00
+        else -> 1.50
+    }
 
     sb.appendLine()
     sb.appendLine(String.format("%-5s %-12s %-12s %-12s", "Dia", "Fecha", "Multa/Dia", "Acumulado"))
@@ -47,7 +53,10 @@ fun ejecutarSistema() {
     println("2. Alumno")
     print("Seleccione: ")
     val opcion = readLine() ?: "2"
-    val tipoUsuario = if (opcion == "1") "Docente" else "Alumno"
+    val tipoUsuario = when (opcion) {
+        "1" -> "Docente"
+        else -> "Alumno"
+    }
 
     print("Fecha de prestamo (DD/MM/AA): ")
     val fechaPrestamo = readLine() ?: ""
@@ -76,7 +85,7 @@ fun ejecutarSistema() {
 
     if (diasAtraso > 0) {
         println("Estado: DEVUELTO CON $diasAtraso DIA(S) DE ATRASO")
-        println("Multa por dia: S/ ${if (tipoUsuario == "Docente") "2.00" else "1.50"} (${tipoUsuario})")
+        println("Multa por dia: S/ ${when (tipoUsuario) { "Docente" -> "2.00" else -> "1.50" }} (${tipoUsuario})")
         print(mostrarTablaMultas(diasAtraso, tipoUsuario))
     } else {
         println("Estado: DEVUELTO A TIEMPO")
