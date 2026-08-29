@@ -1,0 +1,8 @@
+@echo off
+echo =========================================
+echo    CARRITO DE COMPRAS - TIENDA TECSUP
+echo =========================================
+echo.
+java -jar console\build\libs\console.jar
+echo.
+pause
