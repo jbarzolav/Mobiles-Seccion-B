@@ -80,6 +80,22 @@ Descuento aplicado :      S/   160.83
 TOTAL CON DESCUENTO:      S/  3055.85
 ```
 
+## Explicacion de val vs var
+
+**Pregunta: Por que nombre y precio son `val` pero cantidad es `var`? Que pasaria si intentas cambiar el precio despues de crear el producto?**
+
+- `nombre` y `precio` son `val` porque son propiedades inmutables que definen la identidad y costo base de un producto. Una vez creado, no deberian cambiar directamente.
+- `cantidad` es `var` porque es una propiedad mutable que representa cuantas unidades hay en el carrito.
+
+Si intento cambiar el precio:
+
+```kotlin
+val producto = Producto("Laptop HP", 2500.0, 1)
+producto.precio = 999.0  // ERROR: Val cannot be reassigned
+```
+
+Kotlin genera un error de compilacion porque `precio` esta declarado con `val`. Esto protege la integridad de los datos y evita modificaciones accidentales.
+
 ## Como Ejecutar
 
 1. Clonar el repositorio
