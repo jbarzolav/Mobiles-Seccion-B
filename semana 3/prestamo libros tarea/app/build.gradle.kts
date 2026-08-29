@@ -38,7 +38,8 @@ dependencies {
 }
 
 tasks.register<JavaExec>("runPrestamo") {
-    classpath = sourceSets["main"].runtimeClasspath
+    dependsOn("compileDebugKotlin")
+    classpath = files(layout.buildDirectory.dir("tmp/kotlin-classes/debug")) + configurations.getByName("debugRuntimeClasspath")
     mainClass.set("com.barzola.prestamodelibros.PrestamoKt")
     standardInput = System.`in`
 }
