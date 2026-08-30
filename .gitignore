@@ -1,25 +1,7 @@
 .idea/
 *.iml
 out/
-laboratorio-2/lab-carrito-sin-ia/
-laboratorio-2/lab-carrito-con-ia/
-laboratorio-2 - Acceso directo.lnk
-semana 3/prestamo libros tarea/.gitignore
-semana 3/prestamo libros tarea/.idea/
-semana 3/prestamo libros tarea/app/.gitignore
-semana 3/prestamo libros tarea/app/build/
-semana 3/prestamo libros tarea/console/build/
-semana 3/prestamo libros tarea/gradle/
-semana 3/prestamo libros tarea/gradlew
-semana 3/prestamo libros tarea/gradlew.bat
-semana 3/prestamo libros tarea/local.properties
-semana 3/prestamo libros tarea/app/src/androidTest/
-semana 3/prestamo libros tarea/app/src/test/
-semana 3/prestamo libros tarea/app/src/main/res/
-semana 3/prestamo libros tarea/app/src/main/java/com/barzola/prestamodelibros/MainActivity.kt
-semana 3/prestamo libros tarea/app/src/main/java/com/barzola/prestamodelibros/ui/
-semana 3/prestamo libros tarea/app/src/main/keepRules/
-semana 3/prestamo libros tarea/app/build.gradle.kts
-semana 3/prestamo libros tarea/build.gradle.kts
-semana 3/prestamo libros tarea/gradle.properties
-semana 3/prestamo libros tarea/settings.gradle.kts
+.gradle/
+.kotlin/
+local.properties
+*.lnk
