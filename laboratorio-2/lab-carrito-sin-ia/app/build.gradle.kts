@@ -52,3 +52,12 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
+
+tasks.register<JavaExec>("runCarrito") {
+    dependsOn("compileDebugKotlin")
+    classpath =
+        files(layout.buildDirectory.dir("intermediates/built_in_kotlinc/debug/compileDebugKotlin/classes")) +
+                configurations.getByName("debugRuntimeClasspath")
+    mainClass.set("com.barzola.lab02carritokotlin.CarritoKt")
+    standardInput = System.`in`
+}

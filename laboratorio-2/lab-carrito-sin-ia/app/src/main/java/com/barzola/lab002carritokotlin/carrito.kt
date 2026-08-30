@@ -18,15 +18,17 @@ fun calcularTotal(subtotal: Double, igv: Double): Double {
     return subtotal + igv
 }
 
-fun mostrarDetalle(productos: List<Producto>) {
-    println("--------- DETALLE DEL CARRITO ---------")
+fun mostrarDetalle(productos: List<Producto>): String {
+    val sb = StringBuilder()
+    sb.appendLine("--------- DETALLE DEL CARRITO ---------")
     var i = 1
     for (p in productos) {
         val importe = p.precio * p.cantidad
-        println(String.format("%d. %-20s x%d S/ %8.2f", i, p.nombre, p.cantidad, importe))
+        sb.appendLine(String.format("%d. %-20s x%d S/ %8.2f", i, p.nombre, p.cantidad, importe))
         i++
     }
-    println("---------------------------------------")
+    sb.appendLine("---------------------------------------")
+    return sb.toString()
 }
 
 fun calcularDescuento(total: Double): Double {
