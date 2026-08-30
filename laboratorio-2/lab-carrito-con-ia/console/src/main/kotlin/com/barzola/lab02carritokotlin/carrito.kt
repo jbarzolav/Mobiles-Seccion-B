@@ -1,6 +1,8 @@
 package com.barzola.lab02carritokotlin
 
-
+// ============================================
+// PARADIGMA POO - 4 CONCEPTOS FUNDAMENTALES
+// ============================================
 
 // ENCAPSULAMIENTO: datos y comportamiento juntos en una clase
 open class Producto(val nombre: String, val precio: Double, var cantidad: Int) {
@@ -8,7 +10,7 @@ open class Producto(val nombre: String, val precio: Double, var cantidad: Int) {
 }
 
 // HERENCIA: ProductoDigital hereda de Producto
-class ProductoDigital(nombre: String, precio: Double, cantidad: Int, val formato: String) 
+class ProductoDigital(nombre: String, precio: Double, cantidad: Int, val formato: String)
     : Producto(nombre, precio, cantidad) {
     // POLIMORFISMO: sobreescribe el metodo con comportamiento diferente
     override fun calcularSubtotal(): Double = precio * cantidad * 0.9
@@ -56,7 +58,7 @@ fun eliminarProducto(productos: MutableList<Producto>, nombre: String): Boolean 
 
 fun ejecutarCarrito(): String {
     val sb = StringBuilder()
-    
+
     sb.appendLine("=========================================")
     sb.appendLine("   CARRITO DE COMPRAS - TIENDA TECSUP   ")
     sb.appendLine("=========================================")
@@ -67,25 +69,21 @@ fun ejecutarCarrito(): String {
     sb.appendLine("Cliente: $nombreCliente")
     sb.appendLine()
 
-    // Productos de ejemplo
     carrito.add(Producto("Laptop HP", 2500.0, 1))
     carrito.add(Producto("Mouse Logitech", 45.5, 2))
     carrito.add(Producto("Audifonos Sony", 120.0, 1))
     carrito.add(ProductoDigital("Curso Kotlin", 150.0, 1, "PDF"))
 
-    // Detalle
     sb.append(mostrarDetalle(carrito))
     sb.appendLine("Cantidad de productos: ${carrito.size}")
     sb.appendLine()
 
-    // Producto mas caro
     val masCaro = carrito.maxByOrNull { it.precio }
     if (masCaro != null) {
         sb.appendLine("Producto mas caro: ${masCaro.nombre} " + String.format("(S/ %.2f)", masCaro.precio))
     }
     sb.appendLine()
 
-    // Calcular totales
     val subtotal = calcularSubtotal(carrito)
     val igv = calcularIGV(subtotal)
     val totalBase = calcularTotal(subtotal, igv)
@@ -98,7 +96,6 @@ fun ejecutarCarrito(): String {
     sb.appendLine(String.format("%-25s S/ %8.2f", "Descuento aplicado :", descuento))
     sb.appendLine(String.format("%-25s S/ %8.2f", "TOTAL CON DESCUENTO:", totalConDescuento))
 
-    // Buscar producto
     sb.appendLine()
     sb.appendLine("========== BUSCAR PRODUCTO ==========")
     val nombreBuscar = "Mouse Logitech"
@@ -109,7 +106,6 @@ fun ejecutarCarrito(): String {
         sb.appendLine("Producto '$nombreBuscar' no encontrado")
     }
 
-    // Eliminar producto
     sb.appendLine()
     sb.appendLine("========== ELIMINAR PRODUCTO ==========")
     val nombreEliminar = "Audifonos Sony"
@@ -121,7 +117,6 @@ fun ejecutarCarrito(): String {
     }
     sb.appendLine()
 
-    // Totales actualizados
     sb.append(mostrarDetalle(carrito))
     sb.appendLine("Cantidad de productos: ${carrito.size}")
     sb.appendLine()
@@ -172,7 +167,7 @@ fun main() {
         println()
     }
 
-    mostrarDetalle(carrito)
+    print(mostrarDetalle(carrito))
     println("Cantidad de productos: ${carrito.size}")
     println()
 
@@ -217,7 +212,7 @@ fun main() {
     }
     println()
 
-    mostrarDetalle(carrito)
+    print(mostrarDetalle(carrito))
     println("Cantidad de productos: ${carrito.size}")
     println()
 
