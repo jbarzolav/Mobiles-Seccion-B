@@ -142,6 +142,16 @@ fun RegistroNotas() {
                     Spacer(modifier = Modifier.height(16.dp))
                     ResultadoCard(promedioPonderado, promedioFinal, redondear)
                 }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Text(
+                    text = "Desarrollado por: José Barzola Veliz",
+                    fontSize = 12.sp,
+                    color = Color.Gray,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                )
             }
         }
     }
