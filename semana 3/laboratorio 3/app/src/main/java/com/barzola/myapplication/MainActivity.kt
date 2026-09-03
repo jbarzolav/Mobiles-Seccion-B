@@ -141,7 +141,7 @@ fun RegistroNotas() {
 
                 if (calculado) {
                     Spacer(modifier = Modifier.height(16.dp))
-                    ResultadoCard(promedioPonderado, promedioFinal, redondear)
+                    ResultadoCard(promedioPonderado, promedioFinal, redondear, nota1, nota2, nota3, nota4)
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -159,7 +159,7 @@ fun RegistroNotas() {
 }
 
 @Composable
-fun ResultadoCard(promedioPonderado: Float, promedioFinal: Float, redondear: Boolean) {
+fun ResultadoCard(promedioPonderado: Float, promedioFinal: Float, redondear: Boolean, nota1: Float, nota2: Float, nota3: Float, nota4: Float) {
     val (observacion, colorChip) = when {
         promedioFinal >= 17f -> "EXCELENTE" to Color(0xFF2E7D32)
         promedioFinal >= 13f -> "APROBADO" to Color(0xFF4CAF50)
@@ -175,13 +175,27 @@ fun ResultadoCard(promedioPonderado: Float, promedioFinal: Float, redondear: Boo
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "Promedio ponderado: ${String.format("%.2f", promedioPonderado)}",
-                fontSize = 14.sp
+                text = "Aporte por curso:",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
             )
+            Text(text = "Fundamentos: ${nota1.toInt()} × 20% = ${String.format("%.2f", nota1 * 0.20f)}", fontSize = 12.sp)
+            Text(text = "POO: ${nota2.toInt()} × 25% = ${String.format("%.2f", nota2 * 0.25f)}", fontSize = 12.sp)
+            Text(text = "Móviles: ${nota3.toInt()} × 30% = ${String.format("%.2f", nota3 * 0.30f)}", fontSize = 12.sp)
+            Text(text = "Base de Datos: ${nota4.toInt()} × 25% = ${String.format("%.2f", nota4 * 0.25f)}", fontSize = 12.sp)
+            Spacer(modifier = Modifier.height(8.dp))
+            HorizontalDivider()
             Spacer(modifier = Modifier.height(8.dp))
             Text(
+                text = "Promedio ponderado: ${String.format("%.2f", promedioPonderado)}",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
                 text = "Promedio final: $notaTexto",
-                fontSize = 14.sp
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(8.dp))
             Surface(
