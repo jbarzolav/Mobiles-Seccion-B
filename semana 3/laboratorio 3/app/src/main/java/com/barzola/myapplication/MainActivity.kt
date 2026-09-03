@@ -130,6 +130,23 @@ fun RegistroNotas() {
                     Text("CALCULAR PROMEDIO")
                 }
 
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedButton(
+                    onClick = {
+                        nota1 = 0f
+                        nota2 = 0f
+                        nota3 = 0f
+                        nota4 = 0f
+                        redondear = false
+                        confirmado = false
+                        calculado = false
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("LIMPIAR")
+                }
+
                 if (!calculado) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
