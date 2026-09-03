@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,7 +121,7 @@ fun RegistroNotas() {
                 Button(
                     onClick = {
                         promedioPonderado = (nota1 * 0.20f) + (nota2 * 0.25f) + (nota3 * 0.30f) + (nota4 * 0.25f)
-                        promedioFinal = if (redondear) promedioPonderado.toInt().toFloat() else promedioPonderado
+                        promedioFinal = if (redondear) promedioPonderado.roundToInt().toFloat() else promedioPonderado
                         calculado = true
                     },
                     modifier = Modifier.fillMaxWidth(),
@@ -165,7 +166,7 @@ fun ResultadoCard(promedioPonderado: Float, promedioFinal: Float, redondear: Boo
         promedioFinal >= 10f -> "EN RECUPERACIÓN" to Color(0xFFFF9800)
         else -> "DESAPROBADO" to Color(0xFFF44336)
     }
-    val notaTexto = if (redondear) "${promedioFinal.toInt()} (redondeado)" else String.format("%.2f", promedioPonderado)
+    val notaTexto = if (redondear) "${promedioFinal.roundToInt()} (redondeado)" else String.format("%.2f", promedioPonderado)
 
     Card(
         modifier = Modifier.fillMaxWidth(),
