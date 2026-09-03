@@ -35,6 +35,7 @@ fun RegistroNotas() {
     var nota3 by remember { mutableFloatStateOf(0f) }
     var nota4 by remember { mutableFloatStateOf(0f) }
     var redondear by remember { mutableStateOf(false) }
+    var confirmado by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -98,6 +99,17 @@ fun RegistroNotas() {
                         checked = redondear,
                         onCheckedChange = { redondear = it }
                     )
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = confirmado,
+                        onCheckedChange = { confirmado = it }
+                    )
+                    Text(text = "Confirmo que las notas son correctas", fontSize = 14.sp)
                 }
             }
         }
