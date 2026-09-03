@@ -111,6 +111,25 @@ fun RegistroNotas() {
                     )
                     Text(text = "Confirmo que las notas son correctas", fontSize = 14.sp)
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = { },
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = confirmado
+                ) {
+                    Text("CALCULAR PROMEDIO")
+                }
+
+                if (!confirmado) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Asigna las notas y confirma para calcular",
+                        fontSize = 14.sp,
+                        color = Color.Gray
+                    )
+                }
             }
         }
     }
