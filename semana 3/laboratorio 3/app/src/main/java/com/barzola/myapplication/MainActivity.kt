@@ -236,7 +236,7 @@ fun CursoSlider(nombre: String, peso: String, value: Float, onValueChange: (Floa
             Text(text = "$nombre ($peso)", fontSize = 14.sp)
             Surface(
                 shape = MaterialTheme.shapes.small,
-                color = Color(0xFF6200EE)
+                color = if (value < 13f) Color(0xFFF44336) else Color(0xFF4CAF50)
             ) {
                 Text(
                     text = "${value.toInt()}",
