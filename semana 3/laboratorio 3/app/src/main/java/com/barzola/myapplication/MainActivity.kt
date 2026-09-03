@@ -34,6 +34,7 @@ fun RegistroNotas() {
     var nota2 by remember { mutableFloatStateOf(0f) }
     var nota3 by remember { mutableFloatStateOf(0f) }
     var nota4 by remember { mutableFloatStateOf(0f) }
+    var redondear by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -84,6 +85,20 @@ fun RegistroNotas() {
                 CursoSlider("Programación en Móviles", "30%", nota3) { nota3 = it }
                 Spacer(modifier = Modifier.height(12.dp))
                 CursoSlider("Base de Datos", "25%", nota4) { nota4 = it }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Redondear promedio final", fontSize = 14.sp)
+                    Switch(
+                        checked = redondear,
+                        onCheckedChange = { redondear = it }
+                    )
+                }
             }
         }
     }
