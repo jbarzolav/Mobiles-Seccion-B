@@ -159,7 +159,12 @@ fun RegistroNotas() {
 
 @Composable
 fun ResultadoCard(promedioPonderado: Float, promedioFinal: Float, redondear: Boolean) {
-    val aprobado = promedioFinal >= 11f
+    val (observacion, colorChip) = when {
+        promedioFinal >= 17f -> "EXCELENTE" to Color(0xFF2E7D32)
+        promedioFinal >= 13f -> "APROBADO" to Color(0xFF4CAF50)
+        promedioFinal >= 10f -> "EN RECUPERACIÓN" to Color(0xFFFF9800)
+        else -> "DESAPROBADO" to Color(0xFFF44336)
+    }
     val notaTexto = if (redondear) "${promedioFinal.toInt()} (redondeado)" else String.format("%.2f", promedioPonderado)
 
     Card(
@@ -180,10 +185,10 @@ fun ResultadoCard(promedioPonderado: Float, promedioFinal: Float, redondear: Boo
             Spacer(modifier = Modifier.height(8.dp))
             Surface(
                 shape = MaterialTheme.shapes.small,
-                color = if (aprobado) Color(0xFF4CAF50) else Color(0xFFF44336)
+                color = colorChip
             ) {
                 Text(
-                    text = if (aprobado) "APROBADO ✓" else "REPROBADO ✗",
+                    text = observacion,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
@@ -192,9 +197,14 @@ fun ResultadoCard(promedioPonderado: Float, promedioFinal: Float, redondear: Boo
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = if (aprobado) "¡Felicidades! Has aprobado el ciclo." else "Lo siento. No alcanzaste la nota mínima.",
+                text = when {
+                    promedioFinal >= 17f -> "¡Excelente! Has obtenido la mejor calificación."
+                    promedioFinal >= 13f -> "¡Felicidades! Has aprobado el ciclo."
+                    promedioFinal >= 10f -> "Estás en recuperación. Esfuerzate más."
+                    else -> "Lo siento. No alcanzaste la nota mínima."
+                },
                 fontSize = 14.sp,
-                color = if (aprobado) Color(0xFF4CAF50) else Color(0xFFF44336)
+                color = colorChip
             )
         }
     }
