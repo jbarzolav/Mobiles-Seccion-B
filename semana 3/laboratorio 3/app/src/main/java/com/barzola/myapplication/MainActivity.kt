@@ -36,6 +36,9 @@ fun RegistroNotas() {
     var nota4 by remember { mutableFloatStateOf(0f) }
     var redondear by remember { mutableStateOf(false) }
     var confirmado by remember { mutableStateOf(false) }
+    var calculado by remember { mutableStateOf(false) }
+    var promedioPonderado by remember { mutableFloatStateOf(0f) }
+    var promedioFinal by remember { mutableFloatStateOf(0f) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -115,14 +118,18 @@ fun RegistroNotas() {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
-                    onClick = { },
+                    onClick = {
+                        promedioPonderado = (nota1 * 0.20f) + (nota2 * 0.25f) + (nota3 * 0.30f) + (nota4 * 0.25f)
+                        promedioFinal = if (redondear) promedioPonderado.toInt().toFloat() else promedioPonderado
+                        calculado = true
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = confirmado
                 ) {
                     Text("CALCULAR PROMEDIO")
                 }
 
-                if (!confirmado) {
+                if (!calculado) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Asigna las notas y confirma para calcular",
@@ -130,7 +137,55 @@ fun RegistroNotas() {
                         color = Color.Gray
                     )
                 }
+
+                if (calculado) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    ResultadoCard(promedioPonderado, promedioFinal, redondear)
+                }
             }
+        }
+    }
+}
+
+@Composable
+fun ResultadoCard(promedioPonderado: Float, promedioFinal: Float, redondear: Boolean) {
+    val aprobado = promedioFinal >= 11f
+    val notaTexto = if (redondear) "${promedioFinal.toInt()} (redondeado)" else String.format("%.2f", promedioPonderado)
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "Promedio ponderado: ${String.format("%.2f", promedioPonderado)}",
+                fontSize = 14.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Promedio final: $notaTexto",
+                fontSize = 14.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Surface(
+                shape = MaterialTheme.shapes.small,
+                color = if (aprobado) Color(0xFF4CAF50) else Color(0xFFF44336)
+            ) {
+                Text(
+                    text = if (aprobado) "APROBADO ✓" else "REPROBADO ✗",
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = if (aprobado) "¡Felicidades! Has aprobado el ciclo." else "Lo siento. No alcanzaste la nota mínima.",
+                fontSize = 14.sp,
+                color = if (aprobado) Color(0xFF4CAF50) else Color(0xFFF44336)
+            )
         }
     }
 }
