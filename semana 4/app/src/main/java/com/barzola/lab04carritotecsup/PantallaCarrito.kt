@@ -29,40 +29,53 @@ fun PantallaCarrito(modifier: Modifier = Modifier) {
         OutlinedTextField(
             value = nombre,
             onValueChange = { nombre = it },
-            label = { Text("Nombre del producto") },
+            label = { Text("Nombre") },
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        OutlinedTextField(
-            value = precio,
-            onValueChange = { precio = it },
-            label = { Text("Precio") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = cantidad,
-            onValueChange = { cantidad = it },
-            label = { Text("Cantidad") },
-            modifier = Modifier.fillMaxWidth()
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            OutlinedTextField(
+                value = precio,
+                onValueChange = { precio = it },
+                label = { Text("Precio") },
+                modifier = Modifier.weight(1f)
+            )
+            OutlinedTextField(
+                value = cantidad,
+                onValueChange = { cantidad = it },
+                label = { Text("Cantidad") },
+                modifier = Modifier.weight(1f)
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        Button(
+            onClick = {
+                val precioNum = precio.toDoubleOrNull() ?: 0.0
+                val cantidadNum = cantidad.toIntOrNull() ?: 0
+                if (nombre.isNotBlank() && precioNum > 0 && cantidadNum > 0) {
+                    productos.add(Producto(nombre, precioNum, cantidadNum))
+                    nombre = ""
+                    precio = ""
+                    cantidad = ""
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("AGREGAR")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         Text(
-            text = "Productos agregados: ${productos.size}",
+            text = "Productos: ${productos.size}",
             style = MaterialTheme.typography.bodyMedium
         )
-
-        productos.forEach { producto ->
-            Text(
-                text = "${producto.nombre} - S/ ${producto.precio} x ${producto.cantidad}",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
     }
 }
