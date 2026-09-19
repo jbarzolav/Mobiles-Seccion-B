@@ -4,22 +4,26 @@
 José Barzola Veliz
 
 ## Descripción
-Aplicación en Kotlin con Jetpack Compose que permite registrar productos (nombre, precio y cantidad) y agregarlos a un carrito de compras.
+Aplicación en Kotlin con Jetpack Compose que permite registrar productos (nombre, precio y cantidad) y agregarlos a un carrito de compras con totales e IGV.
 
 ## Proyecto
 `Lab04CarritoTecsup`
 
-## Etapa 1: Proyecto, modelo y estados
-- Proyecto Android creado y publicado.
-- Data class `Producto(nombre, precio, cantidad)` en su propio archivo `Producto.kt`.
-- Composable `PantallaCarrito` con los estados del formulario (nombre, precio, cantidad) y la lista observable de productos.
+## Capturas
 
-## Pregunta
-**¿Por qué la lista se declara con `val` y aún así podemos agregarle elementos?**
+### Carrito vacío
+![Carrito vacío](imagen%201.png)
 
-En Jetpack Compose se declara:
-```kotlin
-val productos = remember { mutableStateListOf<Producto>() }
-```
+### Carrito con productos
+![Carrito con productos](imagen%202.png)
 
-La palabra `val` fija la **referencia** a la lista, no su contenido. `remember` conserva el objeto entre recomposiciones, y `mutableStateListOf` crea una lista observable (mutable). Al llamar `productos.add(...)`, modificamos el contenido del objeto al que apunta la referencia; como la lista es un `SnapshotStateList`, Compose detecta el cambio y recomponne la UI automáticamente. Por eso `val` no impide agregar elementos.
+## Preguntas conceptuales
+
+### (a) ¿Por qué mutableStateListOf y no una MutableList normal?
+Porque `mutableStateListOf` crea una lista observable que notifica a Compose cuando cambia. Una `MutableList` normal no dispararía recomposición, por lo que la UI no se actualizaría al agregar o eliminar productos.
+
+### (b) ¿Por qué la lista es val?
+Porque `val` fija la referencia a la lista, no su contenido. La lista es un `SnapshotStateList` mutable internamente; al usar `productos.add(...)` o `productos.remove(...)` mutamos el contenido sin cambiar la referencia. Compose detecta esos cambios en el contenido y recompone automáticamente.
+
+### (c) ¿Qué hace weight(1f) en la LazyColumn?
+`weight(1f)` hace que la LazyColumn ocupe todo el espacio vertical disponible que queda en el Column principal, dejando espacio fijo arriba para el formulario y abajo para el panel de totales. Sin él, la lista se achicaría o se expandiría de forma incorrecta.
