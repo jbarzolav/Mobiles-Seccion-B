@@ -1,6 +1,8 @@
 package com.barzola.lab04carritotecsup
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -73,9 +75,13 @@ fun PantallaCarrito(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text(
-            text = "Productos: ${productos.size}",
-            style = MaterialTheme.typography.bodyMedium
-        )
+        LazyColumn {
+            items(productos.size) { index ->
+                Text(
+                    text = "Producto ${index + 1}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
     }
 }
