@@ -33,3 +33,37 @@ Inicio → Detalle de clase → Confirmación
 | 8 | ![resultado 8](imagenes/segunada%20imagendel%20comit%208.jpeg) | Mis reservas con estados Confirmada / Completada |
 | 9 | ![resultado 9](imagenes/tercera%20imagen%20del%20comit%208.jpeg) | Rutinas |
 | 10 | ![resultado 10](imagenes/imgen%204%20del%20comit%208.jpeg) | Mi perfil con estadísticas |
+
+## Mejoras con IA — Fase 2
+
+**Rama:** `mejora-con-ia-semana-5` — Mejoras de reserva con IA.
+
+### Commits
+
+| # | Imagen | Descripción |
+|---|--------|-------------|
+| 1 | ![mejora commit 1](imagenes%20con%20ia/imagen%20del%20promt%201.jpeg) | Se agrego AlertDialog de confirmacion al reservar cupo en Detalle de clase |
+| 2 | ![mejora commit 2](imagenes%20con%20ia/imagen%201%20del%20promt%202.jpeg) | Se agrego Snackbar de reserva exitosa en la pantalla de Confirmacion |
+| 3 | ![mejora commit 3](imagenes%20con%20ia/imagen%201%20del%20promt%203.jpeg) | Se valido cancelar solo reservas Confirmadas y se creo PROMPTS.md |
+
+### Resultados
+
+| # | Imagen | Pantalla |
+|---|--------|----------|
+| 1 | ![mejora 1](imagenes%20con%20ia/imagen%202%20del%20promt%201.jpeg) | AlertDialog "¿Deseas reservar esta clase?" en Detalle |
+| 2 | ![mejora 2](imagenes%20con%20ia/imagen%202%20del%20promt%202.jpeg) | Snackbar "Reserva registrada con éxito" en Confirmación |
+| 3 | ![mejora 3](imagenes%20con%20ia/imagen%202%20del%20promt%203.jpeg) | Mis reservas con botón Cancelar según estado |
+
+### Prompts
+
+**Prompt 1 — Solicitud de la mejora:**
+
+> En la pantalla de Detalle de clase, al presionar el botón "Reservar cupo" se muestra un AlertDialog de confirmación con el mensaje "¿Deseas reservar esta clase?" y las acciones "Cancelar" y "Aceptar". Si acepta, se navega a la Confirmación de reserva; si cancela, se cierra el diálogo. Usa solo remember y mutableStateOf, sin ViewModel.
+
+**Prompt 2 — Corrección tras probar:**
+
+> En la pantalla de Confirmación de reserva, después de que el usuario pulsa "Volver al inicio", muestra un Snackbar con el mensaje "Reserva registrada con éxito" y luego navega al Home. Usa el Scaffold ya existente y el SnackbarHost correspondiente.
+
+**Prompt 3 (opción B) — Validación de estado:**
+
+> En Mis reservas, el botón "Cancelar" de cada ReservaCard debe estar deshabilitado cuando el estado sea "Completada", de modo que solo se puedan cancelar reservas con estado "Confirmada". Valida con remember y mutableStateOf, sin ViewModel.
