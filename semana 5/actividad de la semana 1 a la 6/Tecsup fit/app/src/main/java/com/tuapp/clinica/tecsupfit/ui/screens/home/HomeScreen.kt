@@ -1,11 +1,14 @@
 package com.tuapp.clinica.tecsupfit.ui.screens.home
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -22,7 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.tuapp.clinica.tecsupfit.model.SampleData
+import com.tuapp.clinica.tecsupfit.navigation.Routes
 import com.tuapp.clinica.tecsupfit.ui.components.AppBottomBar
+import com.tuapp.clinica.tecsupfit.ui.components.ClaseCard
 import com.tuapp.clinica.tecsupfit.ui.components.FiltroChips
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,6 +36,14 @@ fun HomeScreen(
     navController: NavHostController
 ) {
     var filtroSeleccionado by remember { mutableStateOf(SampleData.filtros.first()) }
+
+    val clasesFiltradas = remember(filtroSeleccionado) {
+        if (filtroSeleccionado == "Hoy") {
+            SampleData.clases.filter { it.hora.contains("am") || it.hora.contains("6:00") }
+        } else {
+            SampleData.clases
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -71,7 +84,20 @@ fun HomeScreen(
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.fillMaxWidth().height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+            LazyColumn(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+            ) {
+                items(clasesFiltradas) { clase ->
+                    ClaseCard(
+                        clase = clase,
+                        onClick = {
+                            navController.navigate(Routes.DetalleClase.create(clase.id))
+                        }
+                    )
+                }
+            }
         }
     }
 }

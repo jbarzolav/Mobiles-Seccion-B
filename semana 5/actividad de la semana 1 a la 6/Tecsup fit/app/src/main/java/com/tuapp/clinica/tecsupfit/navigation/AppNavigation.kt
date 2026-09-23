@@ -15,9 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.tuapp.clinica.tecsupfit.ui.screens.detalle.DetalleClaseScreen
 import com.tuapp.clinica.tecsupfit.ui.screens.home.HomeScreen
 import com.tuapp.clinica.tecsupfit.ui.screens.reservas.ReservasScreen
 import com.tuapp.clinica.tecsupfit.ui.screens.rutinas.RutinasScreen
@@ -33,6 +36,16 @@ fun AppNavigation() {
     ) {
         composable(Routes.Inicio.route) {
             HomeScreen(navController = navController)
+        }
+        composable(
+            route = Routes.DetalleClase.route,
+            arguments = listOf(navArgument("claseId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val claseId = backStackEntry.arguments?.getInt("claseId") ?: 0
+            DetalleClaseScreen(
+                navController = navController,
+                claseId = claseId
+            )
         }
         composable(Routes.Reservas.route) {
             ReservasScreen(navController = navController)
