@@ -21,14 +21,18 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.tuapp.clinica.tecsupfit.model.SampleData
@@ -42,6 +46,9 @@ fun ConfirmacionReservaScreen(
     fecha: String,
     hora: String
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+
     val clase = SampleData.clases.find { it.id == claseId }
     val fechaFormateada = fecha.replace("-", " ")
     val horaFormateada = hora.replace("-", ":")
@@ -49,6 +56,9 @@ fun ConfirmacionReservaScreen(
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Confirmación") })
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { innerPadding ->
         Column(
@@ -131,10 +141,13 @@ fun ConfirmacionReservaScreen(
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = {
-                    navController.navigate(Routes.Inicio.route) {
-                        popUpTo(Routes.Inicio.route) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar("Reserva registrada con éxito")
+                        navController.navigate(Routes.Inicio.route) {
+                            popUpTo(Routes.Inicio.route) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
                 },
                 modifier = Modifier
