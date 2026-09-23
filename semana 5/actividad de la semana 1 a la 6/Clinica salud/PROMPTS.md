@@ -6,7 +6,7 @@ Mejora implementada: **cancelar una cita con AlertDialog de confirmación** en l
 
 ---
 
-## Prompt 1
+## Prompt 1 — Solicitud de la mejora
 
 **Qué se pidió:**
 
@@ -20,7 +20,7 @@ Mejora implementada: **cancelar una cita con AlertDialog de confirmación** en l
 
 ---
 
-## Prompt 2
+## Prompt 2 — Corrección tras probar
 
 **Qué se pidió:**
 
@@ -34,7 +34,7 @@ Mejora implementada: **cancelar una cita con AlertDialog de confirmación** en l
 
 ---
 
-## Prompt 3
+## Prompt 3 (opción B) — Validación de estado
 
 **Qué se pidió:**
 
