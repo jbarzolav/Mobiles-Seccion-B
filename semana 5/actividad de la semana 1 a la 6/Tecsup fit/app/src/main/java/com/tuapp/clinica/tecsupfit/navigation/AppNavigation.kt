@@ -21,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.tuapp.clinica.tecsupfit.ui.screens.detalle.DetalleClaseScreen
+import com.tuapp.clinica.tecsupfit.ui.screens.confirmacion.ConfirmacionReservaScreen
 import com.tuapp.clinica.tecsupfit.ui.screens.home.HomeScreen
 import com.tuapp.clinica.tecsupfit.ui.screens.reservas.ReservasScreen
 import com.tuapp.clinica.tecsupfit.ui.screens.rutinas.RutinasScreen
@@ -45,6 +46,24 @@ fun AppNavigation() {
             DetalleClaseScreen(
                 navController = navController,
                 claseId = claseId
+            )
+        }
+        composable(
+            route = Routes.ConfirmacionReserva.route,
+            arguments = listOf(
+                navArgument("claseId") { type = NavType.IntType },
+                navArgument("fecha") { type = NavType.StringType },
+                navArgument("hora") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val claseId = backStackEntry.arguments?.getInt("claseId") ?: 0
+            val fecha = backStackEntry.arguments?.getString("fecha") ?: ""
+            val hora = backStackEntry.arguments?.getString("hora") ?: ""
+            ConfirmacionReservaScreen(
+                navController = navController,
+                claseId = claseId,
+                fecha = fecha,
+                hora = hora
             )
         }
         composable(Routes.Reservas.route) {
