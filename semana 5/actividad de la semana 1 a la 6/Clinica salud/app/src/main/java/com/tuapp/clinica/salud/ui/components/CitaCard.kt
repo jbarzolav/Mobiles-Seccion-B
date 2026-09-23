@@ -72,7 +72,7 @@ fun CitaCard(
                     )
                 }
             }
-            if (onCancelar != null) {
+            if (cita.estado == EstadoCita.CONFIRMADA && onCancelar != null) {
                 OutlinedButton(
                     onClick = onCancelar,
                     modifier = Modifier.padding(start = 8.dp)

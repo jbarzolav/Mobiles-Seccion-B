@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.tuapp.clinica.salud.model.Cita
+import com.tuapp.clinica.salud.model.EstadoCita
 import com.tuapp.clinica.salud.model.SampleData
 import com.tuapp.clinica.salud.ui.components.CitaCard
 import kotlinx.coroutines.launch
@@ -104,9 +105,11 @@ fun MisCitasScreen(
                     TextButton(
                         onClick = {
                             citaACancelar?.let { cita ->
-                                SampleData.citasAgendadas.remove(cita)
-                                scope.launch {
-                                    snackbarHostState.showSnackbar("Cita cancelada")
+                                if (cita.estado == EstadoCita.CONFIRMADA) {
+                                    SampleData.citasAgendadas.remove(cita)
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar("Cita cancelada")
+                                    }
                                 }
                             }
                             citaACancelar = null
