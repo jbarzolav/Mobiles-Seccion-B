@@ -13,17 +13,25 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.tuapp.clinica.tecsupfit.model.SampleData
 import com.tuapp.clinica.tecsupfit.ui.components.AppBottomBar
+import com.tuapp.clinica.tecsupfit.ui.components.FiltroChips
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController
 ) {
+    var filtroSeleccionado by remember { mutableStateOf(SampleData.filtros.first()) }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -42,18 +50,26 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(16.dp)
         ) {
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = "Hola, Diego",
+                modifier = Modifier.padding(horizontal = 16.dp),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+            FiltroChips(
+                filtros = SampleData.filtros,
+                seleccionada = filtroSeleccionado,
+                onSeleccionar = { filtroSeleccionado = it }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Clases disponibles",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                modifier = Modifier.padding(horizontal = 16.dp),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.fillMaxWidth().height(8.dp))
         }
