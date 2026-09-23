@@ -54,3 +54,11 @@ Rama: `mejora-con-ia-semana-5` — Mejora: cancelar cita con AlertDialog de conf
 |---|--------|----------|
 | 1 | ![mejora 1](imagenes%20con%20ia/segunada%20imagen%20del%20primer%20promp.jpeg) | AlertDialog de confirmación para cancelar cita |
 | 2 | ![mejora 2](imagenes%20con%20ia/tercera%20imagen%20del%20primer%20promt.jpeg) | Cita cancelada con Snackbar / Mis citas actualizada |
+
+### Prompts
+
+| # | Prompt |
+|---|--------|
+| 1 | Agrega la función de cancelar una cita en la pantalla Mis citas. Cuando el usuario toque el botón "Cancelar" en una cita, debe mostrarse un AlertDialog de confirmación con el mensaje "¿Deseas cancelar esta cita?" y los botones "Sí, cancelar" y "No". Si confirma, la cita debe eliminarse de la lista. |
+| 2 | La cita se elimina pero necesito que al confirmar la cancelación también se muestre un mensaje breve de "Cita cancelada" y que si el usuario elige "No" el diálogo se cierre sin eliminar nada. Además la lista no debe quedar vacía visualmente sin un texto indicando que no hay citas. |
+| 3 | Valida que solo se puedan cancelar citas con estado "Confirmada". Si la cita está "Completada", no debe mostrarse el botón de cancelar porque esa cita ya se realizó. |
