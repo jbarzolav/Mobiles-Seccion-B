@@ -20,13 +20,16 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(
+    navController: NavHostController,
+    onAbrirDrawer: () -> Unit
+) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Clínica Salud+") },
                 navigationIcon = {
-                    IconButton(onClick = { /* Se conecta el drawer en el commit 4 */ }) {
+                    IconButton(onClick = onAbrirDrawer) {
                         Icon(
                             imageVector = Icons.Default.Menu,
                             contentDescription = "Abrir menú"
