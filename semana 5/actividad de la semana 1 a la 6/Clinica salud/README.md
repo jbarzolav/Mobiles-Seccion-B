@@ -35,3 +35,22 @@ Inicio → Perfil del médico → Agendar cita → Confirmación
 | 8 | ![resultado 8](imagenes/imagen%208.8.jpeg) | Agendar cita (selección única) |
 | 9 | ![resultado 9](imagenes/imagen%209.9.jpeg) | Confirmación de la cita |
 | 10 | ![resultado 10](imagenes/imagen%2010.10.jpeg) | Mis citas con estados |
+
+## Mejoras con IA (Fase 2)
+
+Rama: `mejora-con-ia-semana-5` — Mejora: cancelar cita con AlertDialog de confirmación.
+
+### Commits
+
+| # | Imagen | Descripción |
+|---|--------|-------------|
+| 1 | ![mejora commit 1](imagenes%20con%20ia/imagen%201%20con%20ia.jpeg) | Se agrego boton cancelar con AlertDialog de confirmacion en Mis citas |
+| 2 | ![mejora commit 2](imagenes%20con%20ia/imagen%20del%20segundo%20promt.jpeg) | Se agrego mensaje Cita cancelada con Snackbar y estado vacio mejorado |
+| 3 | ![mejora commit 3](imagenes%20con%20ia/imagen%20del%20tercer%20promt.jpeg) | Se valido cancelar solo citas Confirmadas y se creo PROMPTS.md |
+
+### Resultados
+
+| # | Imagen | Pantalla |
+|---|--------|----------|
+| 1 | ![mejora 1](imagenes%20con%20ia/segunada%20imagen%20del%20primer%20promp.jpeg) | AlertDialog de confirmación para cancelar cita |
+| 2 | ![mejora 2](imagenes%20con%20ia/tercera%20imagen%20del%20primer%20promt.jpeg) | Cita cancelada con Snackbar / Mis citas actualizada |
