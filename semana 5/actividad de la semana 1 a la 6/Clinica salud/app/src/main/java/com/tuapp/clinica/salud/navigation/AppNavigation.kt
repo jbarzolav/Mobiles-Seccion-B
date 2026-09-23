@@ -28,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.tuapp.clinica.salud.ui.drawer.AppDrawer
 import com.tuapp.clinica.salud.ui.screens.home.HomeScreen
+import com.tuapp.clinica.salud.ui.screens.perfil.PerfilMedicoScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -71,8 +72,12 @@ fun AppNavigation() {
             composable(
                 route = Routes.PerfilMedico.route,
                 arguments = listOf(navArgument("medicoId") { type = NavType.IntType })
-            ) {
-                PlaceholderScreen(titulo = "Perfil del médico", navController = navController)
+            ) { backStackEntry ->
+                val medicoId = backStackEntry.arguments?.getInt("medicoId") ?: 0
+                PerfilMedicoScreen(
+                    navController = navController,
+                    medicoId = medicoId
+                )
             }
             composable(
                 route = Routes.Agendar.route,
