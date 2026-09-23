@@ -28,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.tuapp.clinica.salud.ui.drawer.AppDrawer
 import com.tuapp.clinica.salud.ui.screens.agendar.AgendarCitaScreen
+import com.tuapp.clinica.salud.ui.screens.confirmacion.ConfirmacionScreen
 import com.tuapp.clinica.salud.ui.screens.home.HomeScreen
 import com.tuapp.clinica.salud.ui.screens.perfil.PerfilMedicoScreen
 import kotlinx.coroutines.launch
@@ -101,8 +102,16 @@ fun AppNavigation() {
                     navArgument("fecha") { type = NavType.StringType },
                     navArgument("hora") { type = NavType.StringType }
                 )
-            ) {
-                PlaceholderScreen(titulo = "Confirmación", navController = navController)
+            ) { backStackEntry ->
+                val medicoId = backStackEntry.arguments?.getInt("medicoId") ?: 0
+                val fecha = backStackEntry.arguments?.getString("fecha") ?: ""
+                val hora = backStackEntry.arguments?.getString("hora") ?: ""
+                ConfirmacionScreen(
+                    navController = navController,
+                    medicoId = medicoId,
+                    fecha = fecha,
+                    hora = hora
+                )
             }
             composable(Routes.MisCitas.route) {
                 PlaceholderScreen(titulo = "Mis citas", navController = navController)
