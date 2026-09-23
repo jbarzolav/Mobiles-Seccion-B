@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +22,8 @@ import com.tuapp.clinica.salud.model.EstadoCita
 @Composable
 fun CitaCard(
     cita: Cita,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCancelar: (() -> Unit)? = null
 ) {
     val colorEstado = when (cita.estado) {
         EstadoCita.CONFIRMADA -> MaterialTheme.colorScheme.primary
@@ -68,6 +70,14 @@ fun CitaCard(
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
+                }
+            }
+            if (onCancelar != null) {
+                OutlinedButton(
+                    onClick = onCancelar,
+                    modifier = Modifier.padding(start = 8.dp)
+                ) {
+                    Text("Cancelar")
                 }
             }
         }

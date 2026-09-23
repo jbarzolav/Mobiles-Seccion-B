@@ -1,5 +1,7 @@
 package com.tuapp.clinica.salud.model
 
+import androidx.compose.runtime.mutableStateListOf
+
 object SampleData {
 
     val especialidades = listOf("Cardiología", "Pediatría", "Dermatología")
@@ -47,7 +49,7 @@ object SampleData {
         )
     )
 
-    val citasAgendadas = listOf(
+    val citasAgendadas = mutableStateListOf(
         Cita(
             medico = "Dra. Ana Torres",
             especialidad = "Cardiología",
