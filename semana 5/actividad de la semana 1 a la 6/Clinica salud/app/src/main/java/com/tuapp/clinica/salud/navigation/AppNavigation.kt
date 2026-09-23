@@ -29,8 +29,11 @@ import androidx.navigation.navArgument
 import com.tuapp.clinica.salud.ui.drawer.AppDrawer
 import com.tuapp.clinica.salud.ui.screens.agendar.AgendarCitaScreen
 import com.tuapp.clinica.salud.ui.screens.confirmacion.ConfirmacionScreen
+import com.tuapp.clinica.salud.ui.screens.historial.HistorialScreen
 import com.tuapp.clinica.salud.ui.screens.home.HomeScreen
+import com.tuapp.clinica.salud.ui.screens.miscitas.MisCitasScreen
 import com.tuapp.clinica.salud.ui.screens.perfil.PerfilMedicoScreen
+import com.tuapp.clinica.salud.ui.screens.perfilusuario.PerfilUsuarioScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -114,13 +117,13 @@ fun AppNavigation() {
                 )
             }
             composable(Routes.MisCitas.route) {
-                PlaceholderScreen(titulo = "Mis citas", navController = navController)
+                MisCitasScreen(navController = navController)
             }
             composable(Routes.Historial.route) {
-                PlaceholderScreen(titulo = "Historial médico", navController = navController)
+                HistorialScreen(navController = navController)
             }
             composable(Routes.Perfil.route) {
-                PlaceholderScreen(titulo = "Perfil", navController = navController)
+                PerfilUsuarioScreen(navController = navController)
             }
         }
     }
