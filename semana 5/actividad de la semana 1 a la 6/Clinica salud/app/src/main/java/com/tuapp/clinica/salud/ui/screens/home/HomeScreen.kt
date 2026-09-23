@@ -1,10 +1,13 @@
 package com.tuapp.clinica.salud.ui.screens.home
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,7 +28,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.tuapp.clinica.salud.model.SampleData
+import com.tuapp.clinica.salud.navigation.Routes
 import com.tuapp.clinica.salud.ui.components.EspecialidadChips
+import com.tuapp.clinica.salud.ui.components.MedicoCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,6 +39,10 @@ fun HomeScreen(
     onAbrirDrawer: () -> Unit
 ) {
     var especialidadSeleccionada by remember { mutableStateOf(SampleData.especialidades.first()) }
+
+    val medicosFiltrados = remember(especialidadSeleccionada) {
+        SampleData.medicos.filter { it.especialidad == especialidadSeleccionada }
+    }
 
     Scaffold(
         topBar = {
@@ -67,6 +76,13 @@ fun HomeScreen(
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Médicos disponibles",
+                modifier = Modifier.padding(horizontal = 16.dp),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
             Spacer(modifier = Modifier.height(12.dp))
             EspecialidadChips(
                 especialidades = SampleData.especialidades,
@@ -74,12 +90,19 @@ fun HomeScreen(
                 onSeleccionar = { especialidadSeleccionada = it }
             )
             Spacer(modifier = Modifier.height(8.dp))
-            // LazyColumn de medicos filtrados en el commit 6
-            Text(
-                text = "Especialidad: $especialidadSeleccionada",
-                modifier = Modifier.padding(horizontal = 16.dp),
-                style = MaterialTheme.typography.bodyMedium
-            )
+            LazyColumn(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+            ) {
+                items(medicosFiltrados) { medico ->
+                    MedicoCard(
+                        medico = medico,
+                        onClick = {
+                            navController.navigate(Routes.PerfilMedico.create(medico.id))
+                        }
+                    )
+                }
+            }
         }
     }
 }
