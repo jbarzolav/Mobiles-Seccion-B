@@ -2,7 +2,8 @@ package com.tuapp.clinica.tecsupfit.model
 
 enum class EstadoReserva(val etiqueta: String) {
     CONFIRMADA("Confirmada"),
-    COMPLETADA("Completada")
+    COMPLETADA("Completada"),
+    CANCELADA("Cancelada")
 }
 
 data class Reserva(
