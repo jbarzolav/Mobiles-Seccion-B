@@ -42,7 +42,7 @@ Inicio → Detalle de clase → Confirmación
 
 | # | Imagen | Descripción |
 |---|--------|-------------|
-| 1 | ![mejora commit 1](imagenes%20con%20ia/imagen%20del%20promt%201.jpeg) | Se agrego AlertDialog de confirmacion al reservar cupo en Detalle de clase |
+| 1 | ![mejora commit 1a](imagenes/imagen%201%20%20del%20promt.jpeg)<br>![mejora commit 1b](imagenes%20con%20ia/imagen%20del%20promt%201.jpeg) | Se agrego AlertDialog de confirmacion al reservar cupo en Detalle de clase |
 | 2 | ![mejora commit 2](imagenes%20con%20ia/imagen%201%20del%20promt%202.jpeg) | Se agrego Snackbar de reserva exitosa en la pantalla de Confirmacion |
 | 3 | ![mejora commit 3](imagenes%20con%20ia/imagen%201%20del%20promt%203.jpeg) | Se valido cancelar solo reservas Confirmadas y se creo PROMPTS.md |
 
