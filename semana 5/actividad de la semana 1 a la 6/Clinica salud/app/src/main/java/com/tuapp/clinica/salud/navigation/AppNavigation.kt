@@ -27,6 +27,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.tuapp.clinica.salud.ui.drawer.AppDrawer
+import com.tuapp.clinica.salud.ui.screens.agendar.AgendarCitaScreen
 import com.tuapp.clinica.salud.ui.screens.home.HomeScreen
 import com.tuapp.clinica.salud.ui.screens.perfil.PerfilMedicoScreen
 import kotlinx.coroutines.launch
@@ -86,8 +87,12 @@ fun AppNavigation() {
                     navArgument("fecha") { type = NavType.StringType },
                     navArgument("hora") { type = NavType.StringType }
                 )
-            ) {
-                PlaceholderScreen(titulo = "Agendar cita", navController = navController)
+            ) { backStackEntry ->
+                val medicoId = backStackEntry.arguments?.getInt("medicoId") ?: 0
+                AgendarCitaScreen(
+                    navController = navController,
+                    medicoId = medicoId
+                )
             }
             composable(
                 route = Routes.Confirmacion.route,
