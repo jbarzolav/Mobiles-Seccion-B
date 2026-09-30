@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,7 @@ class MainActivity : ComponentActivity() {
 fun PantallaPrincipalStore() {
     val categorias = listOf("Todos", "Más vendidos", "Accesorios", "Cómputo")
     var categoriaSeleccionada by remember { mutableStateOf("Todos") }
+    var opcionSeleccionada by remember { mutableStateOf("Inicio") }
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -54,18 +56,27 @@ fun PantallaPrincipalStore() {
                 HorizontalDivider()
                 NavigationDrawerItem(
                     label = { Text("Inicio") },
-                    selected = true,
-                    onClick = { scope.launch { drawerState.close() } }
+                    selected = opcionSeleccionada == "Inicio",
+                    onClick = {
+                        opcionSeleccionada = "Inicio"
+                        scope.launch { drawerState.close() }
+                    }
                 )
                 NavigationDrawerItem(
-                    label = { Text("Categorías") },
-                    selected = false,
-                    onClick = { scope.launch { drawerState.close() } }
+                    label = { Text("Favoritos") },
+                    selected = opcionSeleccionada == "Favoritos",
+                    onClick = {
+                        opcionSeleccionada = "Favoritos"
+                        scope.launch { drawerState.close() }
+                    }
                 )
                 NavigationDrawerItem(
                     label = { Text("Perfil") },
-                    selected = false,
-                    onClick = { scope.launch { drawerState.close() } }
+                    selected = opcionSeleccionada == "Perfil",
+                    onClick = {
+                        opcionSeleccionada = "Perfil"
+                        scope.launch { drawerState.close() }
+                    }
                 )
             }
         }
@@ -87,28 +98,56 @@ fun PantallaPrincipalStore() {
                 )
             }
         ) { paddingValues ->
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
             ) {
-                LazyRow(
-                    modifier = Modifier.padding(vertical = 8.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(categorias) { cat ->
-                        FilterChip(
-                            selected = cat == categoriaSeleccionada,
-                            onClick = { categoriaSeleccionada = cat },
-                            label = { Text(cat) }
-                        )
-                    }
-                }
+                when (opcionSeleccionada) {
+                    "Inicio" -> {
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            LazyRow(
+                                modifier = Modifier.padding(vertical = 8.dp),
+                                contentPadding = PaddingValues(horizontal = 16.dp),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                items(categorias) { cat ->
+                                    FilterChip(
+                                        selected = cat == categoriaSeleccionada,
+                                        onClick = { categoriaSeleccionada = cat },
+                                        label = { Text(cat) }
+                                    )
+                                }
+                            }
 
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(productosFiltrados, key = { it.id }) { producto ->
-                        TarjetaProducto(producto = producto)
+                            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                                items(productosFiltrados, key = { it.id }) { producto ->
+                                    TarjetaProducto(producto = producto)
+                                }
+                            }
+                        }
+                    }
+                    "Favoritos" -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Sección de Favoritos",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                    }
+                    "Perfil" -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Sección de Mi Perfil",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
                     }
                 }
             }
