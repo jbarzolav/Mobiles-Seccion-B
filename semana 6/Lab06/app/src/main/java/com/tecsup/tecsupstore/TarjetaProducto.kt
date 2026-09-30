@@ -4,6 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.*
@@ -73,14 +76,34 @@ fun TarjetaProducto(producto: Producto, modifier: Modifier = Modifier) {
                 ) {
                     DropdownMenuItem(
                         text = { Text("Ver detalles") },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Info,
+                                contentDescription = "Ver detalles"
+                            )
+                        },
                         onClick = { expanded = false }
                     )
                     DropdownMenuItem(
                         text = { Text("Editar") },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Editar"
+                            )
+                        },
                         onClick = { expanded = false }
                     )
+                    HorizontalDivider()
                     DropdownMenuItem(
                         text = { Text("Eliminar") },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Eliminar",
+                                tint = MaterialTheme.colorScheme.error
+                            )
+                        },
                         onClick = { expanded = false }
                     )
                 }
