@@ -1,7 +1,5 @@
 # Lab06 — TECSUP Store
 
-Fase 2 — Mejora con IA.
-
 ## Prompt 1
 
 ![promt 1](imagenes/promt%201.png)
