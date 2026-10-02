@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
@@ -180,13 +181,47 @@ fun PantallaPrincipalStore() {
                                         contentDescription = null
                                     )
                                 },
+                                trailingIcon = {
+                                    if (textoBusqueda.isNotEmpty()) {
+                                        IconButton(onClick = { textoBusqueda = "" }) {
+                                            Icon(
+                                                imageVector = Icons.Default.Close,
+                                                contentDescription = "Limpiar búsqueda"
+                                            )
+                                        }
+                                    }
+                                },
                                 placeholder = { Text("Buscar productos...") },
                                 singleLine = true
                             )
 
                             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                                items(productosFiltrados, key = { it.id }) { producto ->
-                                    TarjetaProducto(producto = producto)
+                                if (productosFiltrados.isEmpty()) {
+                                    item {
+                                        Column(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(32.dp),
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            verticalArrangement = Arrangement.Center
+                                        ) {
+                                            Text(
+                                                text = "No se encontraron productos",
+                                                style = MaterialTheme.typography.bodyLarge,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                            if (textoBusqueda.isNotEmpty()) {
+                                                Spacer(modifier = Modifier.height(8.dp))
+                                                TextButton(onClick = { textoBusqueda = "" }) {
+                                                    Text("Limpiar búsqueda")
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    items(productosFiltrados, key = { it.id }) { producto ->
+                                        TarjetaProducto(producto = producto)
+                                    }
                                 }
                             }
                         }
