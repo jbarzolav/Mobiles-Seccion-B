@@ -47,10 +47,12 @@ fun PantallaPrincipalStore() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    val productosFiltrados = if (categoriaSeleccionada == "Todos") {
-        listaProductosDemo
-    } else {
-        listaProductosDemo.filter { it.categoria == categoriaSeleccionada }
+    val productosFiltrados = remember(textoBusqueda, categoriaSeleccionada) {
+        listaProductosDemo.filter { producto ->
+            val coincideCategoria = (categoriaSeleccionada == "Todos" || producto.categoria == categoriaSeleccionada)
+            val coincideTexto = textoBusqueda.isBlank() || producto.nombre.contains(textoBusqueda, ignoreCase = true)
+            coincideCategoria && coincideTexto
+        }
     }
 
     ModalNavigationDrawer(
