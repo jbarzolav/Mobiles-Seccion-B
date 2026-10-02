@@ -1,10 +1,10 @@
-# Semana 6 — Lab06 · TECSUP Store
+# Lab06 — TECSUP Store
 
 Fase 2 — Mejora con IA.
 
 ## Prompt 1
 
-![promt 1](Lab06/imagenes/promt%201.png)
+![promt 1](imagenes/promt%201.png)
 
 ```
 Dentro del composable PantallaPrincipalStore, en la rama "Inicio" de la pantalla, hay un
@@ -27,7 +27,7 @@ Cuando termines de editar y verificar que el código compila
 
 ## Prompt 2
 
-![promt 2](Lab06/imagenes/promt%202.png)
+![promt 2](imagenes/promt%202.png)
 
 ```
 existe esta lógica:
@@ -55,7 +55,7 @@ Cuando termines y verifiques que compila
 
 ## Prompt 3
 
-![promt 3](Lab06/imagenes/promt%203.png)
+![promt 3](imagenes/promt%203.png)
 
 ```
 COMPLETA la mejora de búsqueda con estos detalles de usabilidad:
