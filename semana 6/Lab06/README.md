@@ -1,4 +1,4 @@
-# Lab06 TECSUP Store — Fase 2 Mejora con IA
+# Lab06 TECSUP Store
 
 ## VI Preguntas de reflexión
 
