@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -41,6 +42,7 @@ fun PantallaPrincipalStore() {
     val categorias = listOf("Todos", "Más vendidos", "Accesorios", "Cómputo")
     var categoriaSeleccionada by remember { mutableStateOf("Todos") }
     var opcionSeleccionada by remember { mutableStateOf("Inicio") }
+    var textoBusqueda by remember { mutableStateOf("") }
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -163,6 +165,22 @@ fun PantallaPrincipalStore() {
                                     )
                                 }
                             }
+
+                            OutlinedTextField(
+                                value = textoBusqueda,
+                                onValueChange = { textoBusqueda = it },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Search,
+                                        contentDescription = null
+                                    )
+                                },
+                                placeholder = { Text("Buscar productos...") },
+                                singleLine = true
+                            )
 
                             LazyColumn(modifier = Modifier.fillMaxSize()) {
                                 items(productosFiltrados, key = { it.id }) { producto ->
