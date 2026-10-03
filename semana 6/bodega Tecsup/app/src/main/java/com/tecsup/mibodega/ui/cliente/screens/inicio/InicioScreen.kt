@@ -1,5 +1,6 @@
 package com.tecsup.mibodega.ui.cliente.screens.inicio
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -65,7 +66,7 @@ import com.tecsup.mibodega.ui.theme.VerdeBodega
  * @param productos lista completa (fake por ahora, luego vendrá de un ViewModel)
  * @param cantidadCarrito para el badge del carrito en la topBar
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun InicioScreen(
     productos: List<Producto> = listaProductosFake,
@@ -182,11 +183,12 @@ fun InicioScreen(
                     contentPadding = PaddingValues(vertical = 12.dp),
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    items(productosFiltrados) { producto ->
+                    items(productosFiltrados, key = { it.id }) { producto ->
                         ProductoCard(
                             producto = producto,
                             onClick = { onProductoClick(producto) },
-                            onAgregar = { onAgregarProducto(producto) }
+                            onAgregar = { onAgregarProducto(producto) },
+                            modifier = Modifier.animateItem()
                         )
                     }
                 }
