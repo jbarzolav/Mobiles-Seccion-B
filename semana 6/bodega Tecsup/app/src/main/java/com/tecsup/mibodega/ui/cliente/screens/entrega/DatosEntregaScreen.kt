@@ -67,14 +67,20 @@ private val horariosDisponibles = listOf(
  */
 @Composable
 fun DatosEntregaScreen(
+    datosIniciales: DatosEntrega? = null,
     onVolver: () -> Unit,
     onConfirmarPedido: (DatosEntrega) -> Unit
 ) {
-    var nombre by remember { mutableStateOf("") }
-    var telefono by remember { mutableStateOf("") }
-    var direccion by remember { mutableStateOf("") }
-    var referencia by remember { mutableStateOf("") }
-    var horario by remember { mutableStateOf(horariosDisponibles.first()) }
+    // Si el cliente ya se registró, el formulario llega precargado con esos datos.
+    var nombre by remember { mutableStateOf(datosIniciales?.nombre.orEmpty()) }
+    var telefono by remember { mutableStateOf(datosIniciales?.telefono.orEmpty()) }
+    var direccion by remember { mutableStateOf(datosIniciales?.direccion.orEmpty()) }
+    var referencia by remember { mutableStateOf(datosIniciales?.referencia.orEmpty()) }
+    var horario by remember {
+        mutableStateOf(
+            datosIniciales?.horario?.takeIf { it.isNotBlank() } ?: horariosDisponibles.first()
+        )
+    }
 
     val formularioListo = nombre.isNotBlank() && telefono.isNotBlank() && direccion.isNotBlank()
 
