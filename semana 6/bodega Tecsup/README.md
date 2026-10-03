@@ -49,27 +49,27 @@
 
 ![Commit 7b](evidencias/septimo%20commit%202.png)
 
-## Preguntas de reflexión
+## VI. Preguntas de reflexión
 
-**¿Qué aprendiste sobre el estado compartido?**
+- ¿Por qué Producto.kt y MainActivity.kt se entregaron completos, y las pantallas no? ¿Qué tienen en común los archivos que sí se dejaron como esqueleto?
 
-> el carrito y los datos de entrega los mantengo arriba en ClienteApp con remember y los reparto hacia abajo con funciones lambda así ninguna pantalla modifica los datos a escondidas y cuando agrego una pantalla nueva solo le paso lo que necesita
+> Producto.kt define los datos que usan todas las pantallas y MainActivity.kt es el punto de entrada que arranca la app sin esos dos nada compila por eso llegaron completos las pantallas quedaron como esqueleto porque eran la práctica y tenían TODO y rutas pendientes
 
-**¿Cómo funciona la navegación de esta app?**
+- ¿Cómo lograste que el filtro de categoría (LazyRow) y el cálculo del carrito reaccionen automáticamente sin que tú "actualices" nada a mano?
 
-> cada pantalla tiene su ruta en el objeto Rutas y ClienteApp decide qué abrir con el NavHost y con popUpTo controlo qué pantallas se borran del historial para que la flecha atrás no regrese a pantallas ya terminadas
+> gracias al estado de Compose con remember cuando toco un chip cambia categoriaSeleccionada y el filtro se recalcula solo sin tocar la lista igual el carrito vive en ClienteApp como lista inmutable al sumar o restar nace un estado nuevo y total y contador se redibujan solos
 
-**¿Qué dificultades tuviste y cómo las resolviste?**
+- ¿Qué diferencia notaste entre navigate() normal (Inicio→Detalle) y el que usa popUpTo (Datos de entrega→Confirmación)?
 
-> al principio no veía las pantallas nuevas en el emulador porque seguía con el APK viejo y también creé la cuenta vacía así que el formulario de entrega llegaba en blanco la solución fue recompilar con Run y escribir los datos antes de crear la cuenta
+> navigate normal apila la pantalla encima y la flecha atrás regresa a la anterior por eso de Inicio a Detalle vuelvo sin problema popUpTo le avisa hasta dónde borrar el historial al terminar el pedido borra entrega confirmación y carrito y la app cierra sin repasar pantallas viejas
 
-**¿Por qué es importante el control de versiones?**
+- ¿Qué tuviste que corregir del código que te generó la IA para el buscador en tiempo real?
 
-> porque me permite separar el trabajo en commits pequeños volver atrás si algo sale mal y demostrar paso a paso qué hice en cada commit sin perder lo que ya funcionaba
+> lo principal fue que el filtro perdía la categoría al escribir ahora une los dos con && y categoriaSeleccionada y textoBusqueda viven juntos en remember también corregí que la X solo salga con texto y agregué mensaje de sin resultados con botón limpiar búsqueda
 
-**¿Qué harías diferente la próxima vez?**
+- Compara el NavigationDrawer del Laboratorio 6 con el NavigationBar de esta tarea: ¿en qué caso usarías cada uno en un proyecto propio?
 
-> probar en el emulador después de cada commit en vez de dejar todas las pruebas para el final
+> el NavigationDrawer esconde muchas secciones tras el menú hamburguesa y sirve para perfiles ajustes o catálogos largos la NavigationBar deja tres o cinco destinos visibles a un clic del pulgar en mi proyecto usaría la barra para inicio carrito y perfil y el drawer si hay muchas secciones
 
 ## Conclusiones
 
