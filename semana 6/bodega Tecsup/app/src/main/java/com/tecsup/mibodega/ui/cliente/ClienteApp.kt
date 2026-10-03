@@ -149,7 +149,15 @@ fun ClienteApp() {
                 ConfirmacionScreen(
                     datos = datos,
                     subtotal = carrito.sumOf { it.producto.precio * it.cantidad },
-                    onVolverInicio = { navController.navigate(Rutas.INICIO) }
+                    onVolverInicio = {
+                        // Pedido terminado: se vacía el carrito y se limpia el
+                        // historial hasta Inicio, para que la flecha atrás no
+                        // regrese a confirmación, entrega ni carrito.
+                        carrito = emptyList()
+                        navController.navigate(Rutas.INICIO) {
+                            popUpTo(Rutas.INICIO) { inclusive = true }
+                        }
+                    }
                 )
             }
         }

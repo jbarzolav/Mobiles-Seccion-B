@@ -88,6 +88,9 @@ fun CarritoScreen(
             subtotal = subtotal,
             delivery = COSTO_DELIVERY,
             total = total,
+            // Con el carrito vacío no tiene sentido continuar (paso 6: el
+            // pedido confirmado vacía la lista).
+            habilitado = carrito.isNotEmpty(),
             onContinuarPedido = onContinuarPedido
         )
     }
@@ -176,6 +179,7 @@ private fun ResumenYBoton(
     subtotal: Double,
     delivery: Double,
     total: Double,
+    habilitado: Boolean = true,
     onContinuarPedido: () -> Unit
 ) {
     Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
@@ -203,7 +207,8 @@ private fun ResumenYBoton(
 
         BotonPrimario(
             texto = "Continuar pedido",
-            onClick = onContinuarPedido
+            onClick = onContinuarPedido,
+            habilitado = habilitado
         )
     }
 }
