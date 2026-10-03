@@ -15,7 +15,10 @@ import com.tecsup.mibodega.ui.cliente.modelo.Producto
 import com.tecsup.mibodega.ui.cliente.modelo.listaProductosFake
 import com.tecsup.mibodega.ui.cliente.screens.bienvenida.BienvenidaScreen
 import com.tecsup.mibodega.ui.cliente.screens.carrito.CarritoScreen
+import com.tecsup.mibodega.ui.cliente.screens.confirmacion.ConfirmacionScreen
 import com.tecsup.mibodega.ui.cliente.screens.detalle.DetalleProductoScreen
+import com.tecsup.mibodega.ui.cliente.screens.entrega.DatosEntrega
+import com.tecsup.mibodega.ui.cliente.screens.entrega.DatosEntregaScreen
 import com.tecsup.mibodega.ui.cliente.screens.inicio.InicioScreen
 import com.tecsup.mibodega.ui.cliente.screens.registro.RegistroScreen
 
@@ -33,6 +36,8 @@ private object Rutas {
     const val INICIO = "inicio"
     const val DETALLE = "detalle/{productoId}"
     const val CARRITO = "carrito"
+    const val ENTREGA = "entrega"
+    const val CONFIRMACION = "confirmacion"
 
     fun detalle(productoId: Int) = "detalle/$productoId"
 }
@@ -43,6 +48,10 @@ fun ClienteApp() {
 
     // El carrito vive aquí arriba, no en ninguna Screen.
     var carrito by remember { mutableStateOf<List<ItemCarrito>>(emptyList()) }
+
+    // Datos de entrega: se guardan al confirmar el formulario y los lee
+    // la pantalla de confirmación (viajan por estado, no por argumentos).
+    var datosEntrega by remember { mutableStateOf<DatosEntrega?>(null) }
 
     NavHost(
         navController = navController,
@@ -121,6 +130,28 @@ fun ClienteApp() {
                 },
                 onContinuarPedido = { /* TODO: navegar a DatosEntregaScreen */ }
             )
+        }
+
+        composable(Rutas.ENTREGA) {
+            DatosEntregaScreen(
+                onVolver = { navController.popBackStack() },
+                onConfirmarPedido = { datos ->
+                    datosEntrega = datos
+                    navController.navigate(Rutas.CONFIRMACION)
+                }
+            )
+        }
+
+        composable(Rutas.CONFIRMACION) {
+            // Solo llegamos aquí después de guardar los datos en la pantalla anterior.
+            val datos = datosEntrega
+            if (datos != null) {
+                ConfirmacionScreen(
+                    datos = datos,
+                    subtotal = carrito.sumOf { it.producto.precio * it.cantidad },
+                    onVolverInicio = { navController.navigate(Rutas.INICIO) }
+                )
+            }
         }
     }
 }
