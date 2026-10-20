@@ -1,5 +1,18 @@
 package com.tecsup.ayudacampus.data.local.relation
 
-// TODO: completar la relación Room según el paso correspondiente del laboratorio.
-// Declaración provisional para los tipos del contrato AyudaRepository.
-class TicketConDetalle
+import androidx.room.Embedded
+import androidx.room.Relation
+import com.tecsup.ayudacampus.data.local.entity.Categoria
+import com.tecsup.ayudacampus.data.local.entity.Comentario
+import com.tecsup.ayudacampus.data.local.entity.Ticket
+import com.tecsup.ayudacampus.data.local.entity.Usuario
+
+data class TicketConDetalle(
+    @Embedded val ticket: Ticket,
+    @Relation(parentColumn = "id", entityColumn = "ticketId")
+    val comentarios: List<Comentario>,
+    @Relation(parentColumn = "categoriaId", entityColumn = "id")
+    val categoria: Categoria,
+    @Relation(parentColumn = "clienteId", entityColumn = "id")
+    val cliente: Usuario
+)
