@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Computer
 import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Print
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Wifi
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -32,6 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tecsup.ayudacampus.model.EstadoTicket
 import com.tecsup.ayudacampus.model.Prioridad
 import com.tecsup.ayudacampus.ui.components.AppTopBar
+import com.tecsup.ayudacampus.ui.components.AyudaTextField
 import com.tecsup.ayudacampus.ui.components.TicketCard
 import com.tecsup.ayudacampus.viewmodel.BandejaViewModel
 
@@ -46,6 +48,8 @@ fun BandejaScreen(
 ) {
     val tickets by vm.tickets.collectAsStateWithLifecycle()
     val seleccionado by vm.estadoSeleccionado.collectAsStateWithLifecycle()
+    val prioridadSeleccionada by vm.prioridadSeleccionada.collectAsStateWithLifecycle()
+    val busqueda by vm.busqueda.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = { AppTopBar("Tickets", onVolver = onVolver) },
@@ -55,7 +59,16 @@ fun BandejaScreen(
         }
     ) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {
+            Spacer(Modifier.height(8.dp))
+            AyudaTextField(
+                value = busqueda,
+                onValueChange = { vm.buscar(it) },
+                label = "Buscar por título, número o cliente…",
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                leadingIcon = { Icon(Icons.Outlined.Search, null) }
+            )
             FilaFiltros(seleccionado, onFiltrar = { vm.filtrarPor(it) })
+            FilaFiltrosPrioridad(prioridadSeleccionada, onFiltrar = { vm.filtrarPorPrioridad(it) })
             LazyColumn(
                 Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -80,7 +93,7 @@ fun BandejaScreen(
                 }
                 if (tickets.isEmpty()) {
                     item {
-                        Text("No hay tickets con ese estado",
+                        Text("No hay tickets que coincidan con los filtros",
                             Modifier.padding(top = 24.dp),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -94,13 +107,26 @@ fun BandejaScreen(
 @Composable
 private fun FilaFiltros(seleccionado: EstadoTicket?, onFiltrar: (EstadoTicket?) -> Unit) {
     Row(
-        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         FiltroChip("Todos", seleccionado == null) { onFiltrar(null) }
         FiltroChip("Abiertos", seleccionado == EstadoTicket.ABIERTO) { onFiltrar(EstadoTicket.ABIERTO) }
         FiltroChip("En proceso", seleccionado == EstadoTicket.EN_PROCESO) { onFiltrar(EstadoTicket.EN_PROCESO) }
         FiltroChip("Resueltos", seleccionado == EstadoTicket.RESUELTO) { onFiltrar(EstadoTicket.RESUELTO) }
+    }
+}
+
+@Composable
+private fun FilaFiltrosPrioridad(seleccionado: Prioridad?, onFiltrar: (Prioridad?) -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        FiltroChip("Todas", seleccionado == null) { onFiltrar(null) }
+        FiltroChip("Alta", seleccionado == Prioridad.ALTA) { onFiltrar(Prioridad.ALTA) }
+        FiltroChip("Media", seleccionado == Prioridad.MEDIA) { onFiltrar(Prioridad.MEDIA) }
+        FiltroChip("Baja", seleccionado == Prioridad.BAJA) { onFiltrar(Prioridad.BAJA) }
     }
 }
 
