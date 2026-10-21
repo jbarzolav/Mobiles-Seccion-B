@@ -17,6 +17,7 @@ class AyudaViewModelFactory(
             CategoriasViewModel::class.java -> CategoriasViewModel(repo)
             SesionViewModel::class.java -> SesionViewModel(repo, preferencias)
             MisTicketsViewModel::class.java -> MisTicketsViewModel(repo, requireNotNull(usuario))
+            NuevoTicketViewModel::class.java -> NuevoTicketViewModel(repo, requireNotNull(usuario))
             else -> error("ViewModel no configurado: ${modelClass.name}")
         } as T
     }

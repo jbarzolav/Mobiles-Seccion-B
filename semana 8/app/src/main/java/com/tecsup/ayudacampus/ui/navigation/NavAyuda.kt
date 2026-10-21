@@ -32,6 +32,8 @@ import com.tecsup.ayudacampus.ui.theme.AyudaTheme
 import com.tecsup.ayudacampus.viewmodel.SesionViewModel
 import com.tecsup.ayudacampus.viewmodel.MisTicketsViewModel
 import com.tecsup.ayudacampus.ui.cliente.MisTicketsScreen
+import com.tecsup.ayudacampus.ui.cliente.NuevoTicketScreen
+import com.tecsup.ayudacampus.viewmodel.NuevoTicketViewModel
 
 @Composable
 fun NavAyuda(repo: AyudaRepository, preferencias: PreferenciasStore) {
@@ -76,8 +78,13 @@ fun NavAyuda(repo: AyudaRepository, preferencias: PreferenciasStore) {
             }
         }
         composable(Rutas.NUEVO_TICKET) {
-            DestinoProvisional("Nuevo ticket", usuario?.nombre.orEmpty(), "Formulario pendiente del paso 8") {
-                TextButton(onClick = { navController.popBackStack() }) { Text("Volver") }
+            usuario?.let { actual ->
+                val nuevoFactory = remember(actual) { AyudaViewModelFactory(repo, preferencias, actual) }
+                val vm: NuevoTicketViewModel = viewModel(factory = nuevoFactory)
+                NuevoTicketScreen(vm,
+                    onVolver = { navController.popBackStack() },
+                    onEnviado = { navController.popBackStack(Rutas.MIS_TICKETS, false) },
+                    onPerfil = { navController.navigate(Rutas.PERFIL) })
             }
         }
         composable(Rutas.DETALLE_TICKET) { entrada ->
