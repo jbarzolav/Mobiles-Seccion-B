@@ -22,7 +22,10 @@ class SesionViewModel(
     val lista = _lista.asStateFlow()
     private val _cargando = MutableStateFlow(false)
     val cargando = _cargando.asStateFlow()
+
     val modoOscuro = preferencias.modoOscuro.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+    val notificaciones = preferencias.notificaciones.stateIn(viewModelScope, SharingStarted.Eagerly, true)
+    val recibirTickets = preferencias.recibirTickets.stateIn(viewModelScope, SharingStarted.Eagerly, true)
 
     init {
         viewModelScope.launch {
@@ -72,5 +75,47 @@ class SesionViewModel(
                 _cargando.value = false
             }
         }
+    }
+
+    fun cambiarPerfil(onCambio: () -> Unit) {
+        val actual = _usuarioActual.value ?: return
+        viewModelScope.launch {
+            try {
+                val nuevoRol = if (actual.rol == Rol.ADMIN.name) Rol.CLIENTE else Rol.ADMIN
+                val nuevoCorreo = if (nuevoRol == Rol.ADMIN) "soporte@campus.test" else "juan@campus.test"
+                val nuevaClave = if (nuevoRol == Rol.ADMIN) "admin" else "1234"
+                val nuevoUsuario = repo.login(nuevoCorreo, nuevaClave)
+                    ?: if (nuevoRol == Rol.ADMIN) repo.obtenerUsuario(2) else repo.obtenerUsuario(1)
+                if (nuevoUsuario != null) {
+                    preferencias.guardarSesion(nuevoRol, nuevoUsuario.id)
+                    _usuarioActual.value = nuevoUsuario
+                    onCambio()
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                _error.value = "No se pudo cambiar de perfil."
+            }
+        }
+    }
+
+    fun cerrarSesion(onCerrado: () -> Unit) {
+        viewModelScope.launch {
+            preferencias.cerrarSesion()
+            _usuarioActual.value = null
+            onCerrado()
+        }
+    }
+
+    fun cambiarModoOscuro(b: Boolean) {
+        viewModelScope.launch { preferencias.guardarModoOscuro(b) }
+    }
+
+    fun cambiarNotificaciones(b: Boolean) {
+        viewModelScope.launch { preferencias.guardarNotificaciones(b) }
+    }
+
+    fun cambiarRecibirTickets(b: Boolean) {
+        viewModelScope.launch { preferencias.guardarRecibirTickets(b) }
     }
 }

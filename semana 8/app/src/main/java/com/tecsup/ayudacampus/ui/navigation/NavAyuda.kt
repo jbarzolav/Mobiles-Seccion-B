@@ -7,7 +7,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -22,8 +21,10 @@ import com.tecsup.ayudacampus.ui.cliente.DetalleTicketScreen
 import com.tecsup.ayudacampus.ui.cliente.LoginScreen
 import com.tecsup.ayudacampus.ui.cliente.MisTicketsScreen
 import com.tecsup.ayudacampus.ui.cliente.NuevoTicketScreen
+import com.tecsup.ayudacampus.ui.cliente.PerfilScreen
 import com.tecsup.ayudacampus.ui.cliente.SplashScreen
 import com.tecsup.ayudacampus.ui.components.AppTopBar
+import com.tecsup.ayudacampus.ui.soporte.AjustesScreen
 import com.tecsup.ayudacampus.ui.soporte.AtenderTicketScreen
 import com.tecsup.ayudacampus.ui.soporte.BandejaScreen
 import com.tecsup.ayudacampus.ui.soporte.BarraSoporte
@@ -49,6 +50,7 @@ fun NavAyuda(repo: AyudaRepository, preferencias: PreferenciasStore) {
     val usuario by sesion.usuarioActual.collectAsStateWithLifecycle()
     val lista by sesion.lista.collectAsStateWithLifecycle()
     val oscuro by sesion.modoOscuro.collectAsStateWithLifecycle()
+    val recibirTickets by sesion.recibirTickets.collectAsStateWithLifecycle()
     val rol = if (usuario?.rol == Rol.ADMIN.name) Rol.ADMIN else Rol.CLIENTE
 
     AyudaTheme(rol = rol, darkTheme = oscuro) {
@@ -88,10 +90,13 @@ fun NavAyuda(repo: AyudaRepository, preferencias: PreferenciasStore) {
                 usuario?.let { actual ->
                     val nuevoFactory = remember(actual) { AyudaViewModelFactory(repo, preferencias, actual) }
                     val vm: NuevoTicketViewModel = viewModel(factory = nuevoFactory)
-                    NuevoTicketScreen(vm,
+                    NuevoTicketScreen(
+                        vm = vm,
+                        recibirTickets = recibirTickets,
                         onVolver = { navController.popBackStack() },
                         onEnviado = { navController.popBackStack(Rutas.MIS_TICKETS, false) },
-                        onPerfil = { navController.navigate(Rutas.PERFIL) })
+                        onPerfil = { navController.navigate(Rutas.PERFIL) }
+                    )
                 }
             }
             composable(Rutas.DETALLE_TICKET) { entrada ->
@@ -106,8 +111,24 @@ fun NavAyuda(repo: AyudaRepository, preferencias: PreferenciasStore) {
                 }
             }
             composable(Rutas.PERFIL) {
-                DestinoProvisional("Perfil", usuario?.nombre.orEmpty(), "Perfil pendiente del paso 12") {
-                    TextButton(onClick = { navController.popBackStack() }) { Text("Volver") }
+                usuario?.let { actual ->
+                    PerfilScreen(
+                        usuario = actual,
+                        sesion = sesion,
+                        repo = repo,
+                        onTickets = { navController.popBackStack(Rutas.MIS_TICKETS, false) },
+                        onNuevo = { navController.navigate(Rutas.NUEVO_TICKET) },
+                        onCambioPerfil = {
+                            navController.navigate(Rutas.PANEL) {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        },
+                        onCerrarSesion = {
+                            navController.navigate(Rutas.LOGIN) {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        }
+                    )
                 }
             }
             composable(Rutas.PANEL) {
@@ -116,7 +137,7 @@ fun NavAyuda(repo: AyudaRepository, preferencias: PreferenciasStore) {
                     onVerAltas = { navController.navigate(Rutas.BANDEJA) },
                     onTickets = { navController.navigate(Rutas.BANDEJA) },
                     onCategorias = { navController.navigate(Rutas.CATEGORIAS) },
-                    onAjustes = {})
+                    onAjustes = { navController.navigate(Rutas.AJUSTES) })
             }
             composable(Rutas.BANDEJA) {
                 val bandejaVm: BandejaViewModel = viewModel(factory = factory)
@@ -125,7 +146,7 @@ fun NavAyuda(repo: AyudaRepository, preferencias: PreferenciasStore) {
                     onAtender = { navController.navigate(Rutas.atenderTicket(it)) },
                     onPanel = { navController.popBackStack(Rutas.PANEL, false) },
                     onCategorias = { navController.navigate(Rutas.CATEGORIAS) },
-                    onAjustes = {})
+                    onAjustes = { navController.navigate(Rutas.AJUSTES) })
             }
             composable(Rutas.ATENDER_TICKET) { entrada ->
                 usuario?.let { actual ->
@@ -139,7 +160,7 @@ fun NavAyuda(repo: AyudaRepository, preferencias: PreferenciasStore) {
                         onPanel = { navController.popBackStack(Rutas.PANEL, false) },
                         onTickets = { navController.navigate(Rutas.BANDEJA) },
                         onCategorias = { navController.navigate(Rutas.CATEGORIAS) },
-                        onAjustes = {}
+                        onAjustes = { navController.navigate(Rutas.AJUSTES) }
                     )
                 }
             }
@@ -162,7 +183,7 @@ fun NavAyuda(repo: AyudaRepository, preferencias: PreferenciasStore) {
                             onPanel = { navController.popBackStack(Rutas.PANEL, false) },
                             onTickets = { navController.navigate(Rutas.BANDEJA) },
                             onCategorias = {},
-                            onAjustes = {})
+                            onAjustes = { navController.navigate(Rutas.AJUSTES) })
                     },
                     floatingActionButton = {
                         FloatingActionButton(onClick = { navController.navigate(Rutas.formularioCategoria()) }) {
@@ -192,18 +213,27 @@ fun NavAyuda(repo: AyudaRepository, preferencias: PreferenciasStore) {
                     onVolver = { navController.popBackStack() }
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun DestinoProvisional(titulo: String, nombre: String, mensaje: String, contenido: @Composable () -> Unit = {}) {
-    Scaffold(topBar = { AppTopBar(titulo) }) { padding ->
-        Column(Modifier.padding(padding).padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            Text("Hola, $nombre", style = MaterialTheme.typography.titleLarge)
-            Text("Sesión iniciada correctamente")
-            Text(mensaje)
-            contenido()
+            composable(Rutas.AJUSTES) {
+                usuario?.let { actual ->
+                    AjustesScreen(
+                        usuario = actual,
+                        sesion = sesion,
+                        onPanel = { navController.popBackStack(Rutas.PANEL, false) },
+                        onTickets = { navController.navigate(Rutas.BANDEJA) },
+                        onCategorias = { navController.navigate(Rutas.CATEGORIAS) },
+                        onCambioPerfil = {
+                            navController.navigate(Rutas.MIS_TICKETS) {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        },
+                        onCerrarSesion = {
+                            navController.navigate(Rutas.LOGIN) {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        }
+                    )
+                }
+            }
         }
     }
 }

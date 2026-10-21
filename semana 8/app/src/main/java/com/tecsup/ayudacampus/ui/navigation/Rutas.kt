@@ -15,4 +15,5 @@ object Rutas {
     fun atenderTicket(id: Int) = "atender_ticket/$id"
     const val FORMULARIO_CATEGORIA = "formulario_categoria?id={id}"
     fun formularioCategoria(id: Int? = null) = if (id != null) "formulario_categoria?id=$id" else "formulario_categoria"
+    const val AJUSTES = "ajustes"
 }
