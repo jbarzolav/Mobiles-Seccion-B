@@ -21,7 +21,7 @@ class CategoriaRepositoryTest {
         val db = Room.inMemoryDatabaseBuilder(context, AyudaDatabase::class.java).build()
         try {
             val dao = db.categoriaDao()
-            val repo = AyudaRepositoryRoom(dao)
+            val repo = AyudaRepositoryRoom(dao, db.usuarioDao(), db.ticketDao())
             repo.guardarCategoria(Categoria(nombre = "Software", icono = "code"))
             repo.guardarCategoria(Categoria(nombre = "Hardware", icono = "pc"))
             val iniciales = repo.observarCategorias().first()

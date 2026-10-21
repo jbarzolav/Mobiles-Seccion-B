@@ -14,7 +14,9 @@ class AyudaApp : Application() {
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val database: AyudaDatabase by lazy { AyudaDatabase.obtener(this) }
 
-    val repository: AyudaRepository by lazy { AyudaRepositoryRoom(database.categoriaDao()) }
+    val repository: AyudaRepository by lazy {
+        AyudaRepositoryRoom(database.categoriaDao(), database.usuarioDao(), database.ticketDao())
+    }
 
     override fun onCreate() {
         super.onCreate()
