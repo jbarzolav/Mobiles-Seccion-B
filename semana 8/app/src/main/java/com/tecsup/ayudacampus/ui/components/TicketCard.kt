@@ -3,10 +3,12 @@ package com.tecsup.ayudacampus.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,6 +27,7 @@ fun TicketCard(
     tiempo: String,
     estado: EstadoTicket,
     prioridad: Prioridad,
+    fecha: Long = System.currentTimeMillis(),
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
     iconoCategoria: (@Composable () -> Unit)? = null
@@ -51,8 +54,19 @@ fun TicketCard(
                     horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     EstadoChip(estado)
                     PrioridadChip(prioridad)
+                    Surface(
+                        shape = RoundedCornerShape(50),
+                        color = MaterialTheme.colorScheme.surfaceVariant
+                    ) {
+                        Text(
+                            calcularSlaRestante(prioridad, fecha),
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                     Text(tiempo, modifier = Modifier.weight(1f), style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = androidx.compose.ui.text.style.TextAlign.End)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.End)
                 }
             }
         }
@@ -64,6 +78,19 @@ fun TicketCard(
         Surface(onClick = onClick, modifier = modifier.fillMaxWidth(), shape = MaterialTheme.shapes.medium,
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant), content = contenido)
     }
+}
+
+private fun calcularSlaRestante(prioridad: Prioridad, fecha: Long): String {
+    val horasSla = when (prioridad) {
+        Prioridad.ALTA -> 4L
+        Prioridad.MEDIA -> 24L
+        Prioridad.BAJA -> 72L
+    }
+    val limiteMs = horasSla * 3_600_000L
+    val transcurrido = System.currentTimeMillis() - fecha
+    val restanteMs = limiteMs - transcurrido
+    val horasRestantes = (restanteMs / 3_600_000L)
+    return if (horasRestantes >= 0) "SLA: ${horasRestantes}h" else "SLA vencido"
 }
 
 @Preview(name = "Componentes · Estudiante", showBackground = true, widthDp = 390, heightDp = 840)

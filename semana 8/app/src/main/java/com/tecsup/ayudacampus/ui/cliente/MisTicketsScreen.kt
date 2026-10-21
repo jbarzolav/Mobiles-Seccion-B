@@ -51,6 +51,7 @@ fun MisTicketsScreen(vm: MisTicketsViewModel, onDetalle: (Int) -> Unit, onNuevo:
                     val t = detalle.ticket
                     TicketCard(t.titulo, detalle.categoria.nombre, "#${t.id.toString().padStart(4, '0')}",
                         t.ubicacion, tiempoTranscurrido(t.fecha), EstadoTicket.valueOf(t.estado), Prioridad.valueOf(t.prioridad),
+                        fecha = t.fecha,
                         onClick = { onDetalle(t.id) }, iconoCategoria = {
                             val icono = when (detalle.categoria.icono) {
                                 "pc" -> Icons.Outlined.Computer

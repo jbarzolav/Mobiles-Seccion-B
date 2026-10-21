@@ -70,6 +70,7 @@ fun BandejaScreen(
                         tiempo = tiempoTranscurrido(t.ticket.fecha),
                         estado = EstadoTicket.valueOf(t.ticket.estado),
                         prioridad = Prioridad.valueOf(t.ticket.prioridad),
+                        fecha = t.ticket.fecha,
                         onClick = { onAtender(t.ticket.id) },
                         iconoCategoria = {
                             Icon(iconoDe(t.categoria.icono), null,
