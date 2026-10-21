@@ -1,6 +1,6 @@
-# AyudaCampus - Sistema de Gestion de Tickets Academicos (Fase 1)
+# AyudaCampus - Sistema de Gestion de Tickets Academicos (Fase 1 y Fase 2 con IA)
 
-Aplicacion Android desarrollada en Jetpack Compose y Kotlin para la gestion de incidencias y tickets en el campus universitario. Permite un flujo completo tanto para estudiantes como para el personal de Soporte Tecnico TI.
+Aplicacion Android desarrollada en Jetpack Compose y Kotlin para la gestion de incidencias y tickets en el campus universitario. Permite un flujo completo tanto para estudiantes como para el personal de Soporte Tecnico TI, incluyendo mejoras asistidas por IA.
 
 ---
 
@@ -39,6 +39,13 @@ graph TD
     Prefs -->|Flow| VM
     VM -->|StateFlow / UI State| UI
 ```
+
+---
+
+## Mejoras Profesionales Asistidas por IA (Fase 2)
+1. **Tiempo promedio de resolucion al panel:** Consulta en `TicketDao` con `AVG(fechaCierre - fecha)` expuesta mediante `StateFlow` en `PanelViewModel` y visualizada en `PanelScreen`.
+2. **Contador de SLA por prioridad:** Calculo automatico del tiempo restante de SLA segun prioridad (Alta: 4h, Media: 24h, Baja: 72h) integrado en `TicketCard`.
+3. **Busqueda avanzada en la bandeja:** Combinacion reactiva con `combine` en `BandejaViewModel` para filtrar simultaneamente por texto, estado y prioridad.
 
 ---
 
