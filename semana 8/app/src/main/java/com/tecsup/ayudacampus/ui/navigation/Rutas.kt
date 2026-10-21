@@ -10,4 +10,9 @@ object Rutas {
     const val PANEL = "panel"
     const val SPLASH = "splash"
     const val CATEGORIAS = "categorias"
+    const val BANDEJA = "bandeja"
+    const val ATENDER_TICKET = "atender_ticket/{id}"
+    fun atenderTicket(id: Int) = "atender_ticket/$id"
+    const val FORMULARIO_CATEGORIA = "formulario_categoria?id={id}"
+    fun formularioCategoria(id: Int? = null) = if (id != null) "formulario_categoria?id=$id" else "formulario_categoria"
 }
