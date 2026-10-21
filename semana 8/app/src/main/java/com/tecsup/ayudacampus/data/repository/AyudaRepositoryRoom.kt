@@ -72,4 +72,5 @@ class AyudaRepositoryRoom(
         tickets.contarPorEstado(estado.name)
     override fun observarCantidadPorCategoria(): Flow<List<ConteoCategoria>> = tickets.contarPorCategoria()
     override fun observarAltasSinAtender(limite: Long): Flow<Int> = tickets.contarAltasSinAtender(limite)
+    override suspend fun obtenerTiempoPromedioResolucion(): Long = tickets.obtenerTiempoPromedioResolucion() ?: 0L
 }

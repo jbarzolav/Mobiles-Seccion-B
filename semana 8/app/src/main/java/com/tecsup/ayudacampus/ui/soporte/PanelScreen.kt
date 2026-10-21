@@ -9,6 +9,7 @@ import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -22,7 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tecsup.ayudacampus.ui.components.AppTopBar
-import com.tecsup.ayudacampus.ui.components.graficos.DatoGrafico
 import com.tecsup.ayudacampus.ui.components.graficos.GraficoBarras
 import com.tecsup.ayudacampus.ui.components.graficos.GraficoDona
 import com.tecsup.ayudacampus.ui.theme.EstadoAbierto
@@ -41,6 +41,7 @@ fun PanelScreen(
     val abiertos by vm.abiertos.collectAsStateWithLifecycle()
     val enProceso by vm.enProceso.collectAsStateWithLifecycle()
     val resueltos by vm.resueltos.collectAsStateWithLifecycle()
+    val tiempoPromedio by vm.tiempoPromedioResolucion.collectAsStateWithLifecycle()
     val porEstado by vm.porEstado.collectAsStateWithLifecycle()
     val porCategoria by vm.porCategoria.collectAsStateWithLifecycle()
     val altasSinAtender by vm.altasSinAtender.collectAsStateWithLifecycle()
@@ -72,6 +73,34 @@ fun PanelScreen(
                     ContadorColored(abiertos, "Abiertos", EstadoAbierto, Modifier.weight(1f))
                     ContadorColored(enProceso, "En proceso", EstadoEnProceso, Modifier.weight(1f))
                     ContadorColored(resueltos, "Resueltos", EstadoResuelto, Modifier.weight(1f))
+                }
+            }
+            item {
+                val horas = (tiempoPromedio / 3_600_000L).coerceAtLeast(0)
+                Surface(
+                    shape = MaterialTheme.shapes.medium,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        Surface(
+                            shape = MaterialTheme.shapes.small,
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            modifier = Modifier.size(40.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(Icons.Outlined.Timer, null, tint = MaterialTheme.colorScheme.primary)
+                            }
+                        }
+                        Column {
+                            Text("Tiempo promedio de resolución", style = MaterialTheme.typography.titleSmall)
+                            Text("$horas horas por ticket cerrado", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
                 }
             }
             item { GraficoDona(porEstado, Modifier.fillMaxWidth()) }

@@ -9,9 +9,11 @@ import com.tecsup.ayudacampus.ui.theme.EstadoAbierto
 import com.tecsup.ayudacampus.ui.theme.EstadoCerrado
 import com.tecsup.ayudacampus.ui.theme.EstadoEnProceso
 import com.tecsup.ayudacampus.ui.theme.EstadoResuelto
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
@@ -20,6 +22,10 @@ class PanelViewModel(private val repo: AyudaRepository) : ViewModel() {
     val abiertos: StateFlow<Int> = contar(EstadoTicket.ABIERTO)
     val enProceso: StateFlow<Int> = contar(EstadoTicket.EN_PROCESO)
     val resueltos: StateFlow<Int> = contar(EstadoTicket.RESUELTO)
+
+    val tiempoPromedioResolucion: StateFlow<Long> = flow {
+        emit(repo.obtenerTiempoPromedioResolucion())
+    }.stateInEnPantalla(0L)
 
     /** Convierte los conteos de Room al formato que esperan los gráficos. */
     val porEstado: StateFlow<List<DatoGrafico>> = combine(
@@ -48,7 +54,7 @@ class PanelViewModel(private val repo: AyudaRepository) : ViewModel() {
     private fun contar(estado: EstadoTicket): StateFlow<Int> =
         repo.observarCantidadPorEstado(estado).stateInEnPantalla(0)
 
-    private fun <T> kotlinx.coroutines.flow.Flow<T>.stateInEnPantalla(inicio: T): StateFlow<T> =
+    private fun <T> Flow<T>.stateInEnPantalla(inicio: T): StateFlow<T> =
         stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), inicio)
 
     private companion object {
