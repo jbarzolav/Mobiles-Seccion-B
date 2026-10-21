@@ -30,6 +30,8 @@ import com.tecsup.ayudacampus.model.Rol
 import com.tecsup.ayudacampus.ui.cliente.LoginScreen
 import com.tecsup.ayudacampus.ui.theme.AyudaTheme
 import com.tecsup.ayudacampus.viewmodel.SesionViewModel
+import com.tecsup.ayudacampus.viewmodel.MisTicketsViewModel
+import com.tecsup.ayudacampus.ui.cliente.MisTicketsScreen
 
 @Composable
 fun NavAyuda(repo: AyudaRepository, preferencias: PreferenciasStore) {
@@ -64,7 +66,29 @@ fun NavAyuda(repo: AyudaRepository, preferencias: PreferenciasStore) {
             LoginScreen(sesion)
         }
         composable(Rutas.MIS_TICKETS) {
-            DestinoProvisional("Mis tickets", usuario?.nombre.orEmpty(), "La lista se implementará en el paso 7")
+            usuario?.let { actual ->
+                val ticketsFactory = remember(actual) { AyudaViewModelFactory(repo, preferencias, actual) }
+                val vm: MisTicketsViewModel = viewModel(key = "tickets-${actual.id}", factory = ticketsFactory)
+                MisTicketsScreen(vm,
+                    onDetalle = { navController.navigate(Rutas.detalleTicket(it)) },
+                    onNuevo = { navController.navigate(Rutas.NUEVO_TICKET) },
+                    onPerfil = { navController.navigate(Rutas.PERFIL) })
+            }
+        }
+        composable(Rutas.NUEVO_TICKET) {
+            DestinoProvisional("Nuevo ticket", usuario?.nombre.orEmpty(), "Formulario pendiente del paso 8") {
+                TextButton(onClick = { navController.popBackStack() }) { Text("Volver") }
+            }
+        }
+        composable(Rutas.DETALLE_TICKET) { entrada ->
+            DestinoProvisional("Ticket #${entrada.arguments?.getString("id")}", usuario?.nombre.orEmpty(), "Detalle pendiente del paso 9") {
+                TextButton(onClick = { navController.popBackStack() }) { Text("Volver") }
+            }
+        }
+        composable(Rutas.PERFIL) {
+            DestinoProvisional("Perfil", usuario?.nombre.orEmpty(), "Perfil pendiente del paso 12") {
+                TextButton(onClick = { navController.popBackStack() }) { Text("Volver") }
+            }
         }
         composable(Rutas.PANEL) {
             DestinoProvisional("Panel de soporte", usuario?.nombre.orEmpty(), "El panel se implementará en el paso 10") {
