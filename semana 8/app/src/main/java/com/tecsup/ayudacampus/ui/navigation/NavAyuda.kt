@@ -19,19 +19,57 @@ import com.tecsup.ayudacampus.ui.soporte.CategoriasScreen
 import com.tecsup.ayudacampus.viewmodel.AyudaViewModelFactory
 import com.tecsup.ayudacampus.viewmodel.CategoriasViewModel
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.tecsup.ayudacampus.data.prefs.PreferenciasStore
+import com.tecsup.ayudacampus.model.Rol
+import com.tecsup.ayudacampus.ui.cliente.LoginScreen
+import com.tecsup.ayudacampus.ui.theme.AyudaTheme
+import com.tecsup.ayudacampus.viewmodel.SesionViewModel
 
 @Composable
-fun NavAyuda(repo: AyudaRepository) {
+fun NavAyuda(repo: AyudaRepository, preferencias: PreferenciasStore) {
     val navController = rememberNavController()
-    val factory = remember(repo) { AyudaViewModelFactory(repo) }
+    val factory = remember(repo, preferencias) { AyudaViewModelFactory(repo, preferencias) }
+    val sesion: SesionViewModel = viewModel(factory = factory)
+    val usuario by sesion.usuarioActual.collectAsStateWithLifecycle()
+    val lista by sesion.lista.collectAsStateWithLifecycle()
+    val oscuro by sesion.modoOscuro.collectAsStateWithLifecycle()
+    val rol = if (usuario?.rol == Rol.ADMIN.name) Rol.ADMIN else Rol.CLIENTE
+    AyudaTheme(rol = rol, darkTheme = oscuro) {
     NavHost(navController = navController, startDestination = Rutas.SPLASH) {
         composable(Rutas.SPLASH) {
-            SplashScreen(onContinuar = {
-                navController.navigate(Rutas.CATEGORIAS) {
+            var tiempoCumplido by rememberSaveable { mutableStateOf(false) }
+            LaunchedEffect(lista, tiempoCumplido) {
+                if (lista && tiempoCumplido) navController.navigate(
+                    if (usuario == null) Rutas.LOGIN else if (rol == Rol.ADMIN) Rutas.PANEL else Rutas.MIS_TICKETS
+                ) {
                     popUpTo(Rutas.SPLASH) { inclusive = true }
                     launchSingleTop = true
                 }
-            })
+            }
+            SplashScreen(onContinuar = { tiempoCumplido = true })
+        }
+        composable(Rutas.LOGIN) {
+            LaunchedEffect(usuario) {
+                if (usuario != null) navController.navigate(if (rol == Rol.ADMIN) Rutas.PANEL else Rutas.MIS_TICKETS) {
+                    popUpTo(Rutas.LOGIN) { inclusive = true }
+                    launchSingleTop = true
+                }
+            }
+            LoginScreen(sesion)
+        }
+        composable(Rutas.MIS_TICKETS) {
+            DestinoProvisional("Mis tickets", usuario?.nombre.orEmpty(), "La lista se implementará en el paso 7")
+        }
+        composable(Rutas.PANEL) {
+            DestinoProvisional("Panel de soporte", usuario?.nombre.orEmpty(), "El panel se implementará en el paso 10") {
+                TextButton(onClick = { navController.navigate(Rutas.CATEGORIAS) }) { Text("Categorías") }
+            }
         }
         composable(Rutas.CATEGORIAS) {
             val vm: CategoriasViewModel = viewModel(factory = factory)
@@ -45,6 +83,19 @@ fun NavAyuda(repo: AyudaRepository) {
                     scope.launch { snackbar.showSnackbar("La edición se implementará en el paso 11") }
                 }, modifier = Modifier.padding(padding))
             }
+        }
+    }
+    }
+}
+
+@Composable
+private fun DestinoProvisional(titulo: String, nombre: String, mensaje: String, contenido: @Composable () -> Unit = {}) {
+    Scaffold(topBar = { AppTopBar(titulo) }) { padding ->
+        Column(Modifier.padding(padding).padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Text("Hola, $nombre", style = MaterialTheme.typography.titleLarge)
+            Text("Sesión iniciada correctamente")
+            Text(mensaje)
+            contenido()
         }
     }
 }

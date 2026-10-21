@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.tecsup.ayudacampus.ui.navigation.NavAyuda
 import com.tecsup.ayudacampus.ui.theme.AyudaTheme
+import com.tecsup.ayudacampus.data.prefs.PreferenciasStore
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AyudaTheme {
-                NavAyuda(repo = (application as AyudaApp).repository)
+                NavAyuda(repo = (application as AyudaApp).repository, preferencias = PreferenciasStore(applicationContext))
             }
         }
     }

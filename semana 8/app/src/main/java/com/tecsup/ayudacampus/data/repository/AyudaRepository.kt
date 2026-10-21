@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 /** Contrato del laboratorio; sus funciones se implementarán en AyudaRepositoryRoom. */
 interface AyudaRepository {
+    suspend fun obtenerUsuario(id: Int): Usuario?
     // Usuarios
     suspend fun login(correo: String, clave: String): Usuario?
 

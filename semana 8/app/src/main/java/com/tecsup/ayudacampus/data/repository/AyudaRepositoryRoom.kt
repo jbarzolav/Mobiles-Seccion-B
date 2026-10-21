@@ -29,6 +29,7 @@ class AyudaRepositoryRoom(
     override suspend fun eliminarCategoria(c: Categoria) = categorias.eliminar(c)
 
     override suspend fun login(correo: String, clave: String): Usuario? = usuarios.login(correo, clave)
+    override suspend fun obtenerUsuario(id: Int): Usuario? = usuarios.obtenerPorId(id)
 
     override suspend fun crearTicket(
         clienteId: Int, categoriaId: Int, titulo: String,

@@ -3,11 +3,18 @@ package com.tecsup.ayudacampus.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.tecsup.ayudacampus.data.repository.AyudaRepository
+import com.tecsup.ayudacampus.data.prefs.PreferenciasStore
 
-class AyudaViewModelFactory(private val repo: AyudaRepository) : ViewModelProvider.Factory {
+class AyudaViewModelFactory(
+    private val repo: AyudaRepository,
+    private val preferencias: PreferenciasStore
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        require(modelClass == CategoriasViewModel::class.java) { "ViewModel no configurado: ${modelClass.name}" }
         @Suppress("UNCHECKED_CAST")
-        return CategoriasViewModel(repo) as T
+        return when (modelClass) {
+            CategoriasViewModel::class.java -> CategoriasViewModel(repo)
+            SesionViewModel::class.java -> SesionViewModel(repo, preferencias)
+            else -> error("ViewModel no configurado: ${modelClass.name}")
+        } as T
     }
 }

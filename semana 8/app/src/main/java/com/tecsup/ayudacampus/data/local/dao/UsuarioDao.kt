@@ -7,6 +7,9 @@ import com.tecsup.ayudacampus.data.local.entity.Usuario
 
 @Dao
 interface UsuarioDao {
+    @Query("SELECT * FROM usuarios WHERE id = :id")
+    suspend fun obtenerPorId(id: Int): Usuario?
+
     @Query("SELECT * FROM usuarios WHERE correo = :correo AND clave = :clave LIMIT 1")
     suspend fun login(correo: String, clave: String): Usuario?
 
